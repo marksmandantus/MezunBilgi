@@ -83,3 +83,7 @@ def registerPage(request):
             messages.error(request, 'Hesabınız oluşturulamadı')
 
     return render(request, 'register.html', {'form': form})
+
+
+def edit_profile(request):
+    return render(request, 'edit_profile.html')
