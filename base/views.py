@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect 
 from django.contrib.auth.decorators import login_required
-from .forms import CustomUserCreationForm
+from django.contrib.auth.forms import UserCreationForm
 from .models import Mezun , Mesaj
 
 
@@ -68,11 +68,18 @@ def etkinlikler(request):
     return render(request, 'etkinlikler.html')
 
 def registerPage(request):
+    form = UserCreationForm()
+
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = UserCreationForm(request.POST)
+
         if form.is_valid():
-            user = form.save()
-            return redirect('login')  # Kullanıcı kaydolduktan sonra yönlendirileceği sayfa
-    else:
-        form = CustomUserCreationForm()
+            user = form.save(commit=False)
+            user.save()
+            messages.success(request, 'Hesabınız oluşturuldu')
+            return redirect('login')
+        
+        else:
+            messages.error(request, 'Hesabınız oluşturulamadı')
+
     return render(request, 'register.html', {'form': form})

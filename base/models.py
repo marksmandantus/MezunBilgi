@@ -1,6 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser , Group
-from django.contrib.auth.forms import UserCreationForm
 
 
 class Mezun(models.Model):
@@ -25,15 +23,6 @@ class Mesaj(models.Model):
     mezun = models.ForeignKey(Mezun, on_delete=models.CASCADE)
     icerik = models.TextField()
 
-
-class CustomUser(AbstractUser):
-    groups = models.ManyToManyField(
-        Group,
-        verbose_name='groups',
-        blank=True,
-        help_text='The groups this user belongs to.',
-        related_name='customuser_groups'  # İlişkiye alternatif bir ters ilişki adı belirliyoruz
-    )
 
 
 
