@@ -14,15 +14,17 @@ def index(request):
     return render(request, 'index.html')
 
 def loginPage(request):
+    context = {}
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
         try:
-            user = User.objects.get(username=username)
+            user = Mezun.objects.get(username=username)
 
         except:
-             messages.error(request, 'Email veya şifre hatalı')
+            context['error_message'] = 'Kullanıcı adı veya şifre hatalı'
+
 
         user = authenticate(request, username=username, password=password)
 
@@ -30,10 +32,10 @@ def loginPage(request):
             login(request, user)
             return render(request, 'anasayfa.html')
         else:
-            messages.error(request, 'Email veya şifre hatalı')
+            context['error_message'] = 'Kullanıcı adı veya şifre hatalı'
             return redirect('login')
             
-    return render(request, 'login.html')
+    return render(request, 'login.html', context)
 
 
 def profile(request):
