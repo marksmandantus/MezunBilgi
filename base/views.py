@@ -28,27 +28,21 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
-            next_url = request.POST.get('next')  # next parametresini al
-            if next_url:  # next parametresi varsa
-                return redirect(next_url)  # next parametresine git
-            else:   
-                return redirect('anasayfa')
-           
-        else:
+            return redirect('anasayfa')
+        else:   
             messages.error(request, 'Email veya şifre hatalı')
-            return render(request, 'login.html')
-
+            return redirect('login')
+            
     return render(request, 'login.html')
 
 def profile(request):
-    user = request.user
+    mezunlar = Mezun.objects.all()
     context = {
-        'user': user
+        'mezunlar': mezunlar
     }
     return render(request, 'profile.html', context)
 
 
-@login_required(login_url='/login/')
 def anasayfa_view(request):
     kullanici = Mezun.objects.all()
     messages = Mesaj.objects.filter(mezun__in=kullanici)

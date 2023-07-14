@@ -17,8 +17,7 @@ class Mezun(AbstractUser):
     profil = models.FileField(null=True, blank=True)
     tc = models.CharField(max_length=11, null=True, unique=True)
 
-    REQUIRED_FIELDS = ['ad', 'soyad']
-    USERNAME_FIELD = 'tc'
+    REQUIRED_FIELDS = ["ad"]
 
     def __str__(self):
         return self.ad + ' ' + self.soyad
