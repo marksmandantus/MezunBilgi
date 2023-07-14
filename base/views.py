@@ -28,16 +28,20 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
-            return render(request, 'anasayfa.html')
+            next_url = request.POST.get('next')  # next parametresini al
+            if next_url:  # next parametresi varsa
+                return redirect(next_url)  # next parametresine git
+            else:   
+                return redirect('anasayfa')
+           
         else:
             messages.error(request, 'Email veya şifre hatalı')
             return render(request, 'login.html')
 
     return render(request, 'login.html')
 
-
 def profile(request):
-    user = Mezun.objects.all()
+    user = request.user
     context = {
         'user': user
     }
@@ -57,7 +61,7 @@ def anasayfa_view(request):
 
 
 def logout_view(request):
-    logout(request)
+    logout(request) 
     return redirect('index')
 
 
@@ -85,5 +89,5 @@ def registerPage(request):
     return render(request, 'register.html', {'form': form})
 
 
-def edit_profile(request):
+def edit_profil(request):
     return render(request, 'edit_profile.html')

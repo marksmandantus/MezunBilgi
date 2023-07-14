@@ -139,3 +139,7 @@ EMAIL_HOST_USER = 'mkocadag214@gmail.com'
 EMAIL_HOST_PASSWORD = '!1qaz2WSX3edc4RFV%56&'
 
 
+LOGIN_REDIRECT_URL = '/anasayfa/'
+
+AUTH_USER_MODEL = 'base.Mezun'
+
