@@ -1,8 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
-
-class Mezun(AbstractUser):
+class Mezun(AbstractBaseUser):
     id = models.AutoField(primary_key=True)
     ad = models.CharField(max_length=50)
     soyad = models.CharField(max_length=50)
@@ -15,9 +14,8 @@ class Mezun(AbstractUser):
     telefon = models.CharField(max_length=50, null=True)
     adres = models.CharField(max_length=50, unique=True, null=True)
     profil = models.FileField(null=True, blank=True)
-    tc = models.CharField(max_length=11, null=True, unique=True)
 
-    REQUIRED_FIELDS = ["ad"]
+    USERNAME_FIELD = 'ad'
 
     def __str__(self):
         return self.ad + ' ' + self.soyad

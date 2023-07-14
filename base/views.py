@@ -28,12 +28,13 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
-            return redirect('anasayfa')
-        else:   
+            return render(request, 'anasayfa.html')
+        else:
             messages.error(request, 'Email veya şifre hatalı')
             return redirect('login')
             
     return render(request, 'login.html')
+
 
 def profile(request):
     mezunlar = Mezun.objects.all()
@@ -55,7 +56,7 @@ def anasayfa_view(request):
 
 
 def logout_view(request):
-    logout(request) 
+    logout(request)
     return redirect('index')
 
 
@@ -83,5 +84,5 @@ def registerPage(request):
     return render(request, 'register.html', {'form': form})
 
 
-def edit_profil(request):
+def edit_profile(request):
     return render(request, 'edit_profile.html')
