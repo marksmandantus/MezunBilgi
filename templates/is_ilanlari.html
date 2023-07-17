@@ -1,12 +1,81 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İLAN</title>
+  <title>İş İlanları</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'styles/hire.css' %}">
+
 </head>
 <body>
-    <h1>İLAN</h1>
-    
+    <nav>
+        <div class="logo">
+            <a class="navbar-brand" href="/anasayfa/"><img src="{% static 'images/brand.svg'%}" alt="" class="brand-img"></a>
+        </div>
+        <ul class="nav-links">
+          <li><a href="/anasayfa/" class="nav-a" >Home</a></li>
+          <li><a href="/profile/" class="nav-a" >Profil</a></li>
+          <li><a href="/logout/" class="nav-a" >Çıkış Yap</a></li>
+        </ul>
+      </nav>
+
+  <main>
+    <h2>Yeni İş İlanları</h2>
+    <ul>
+      <li>
+        <div class="job-card">
+          <h3>Web Geliştirici</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <a href="#">Başvur</a>
+        </div>
+      </li>
+      <li>
+        <div class="job-card">
+          <h3>Grafik Tasarımcı</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <a href="#">Başvur</a>
+        </div>
+      </li>
+      <li>
+        <div class="job-card">
+          <h3>Pazarlama Uzmanı</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <a href="#">Başvur</a>
+        </div>
+      </li>
+      <li>
+        <div class="job-card">
+          <h3>Veri Bilimcisi</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <a href="#">Başvur</a>
+        </div>
+      </li>
+      <li>
+        <div class="job-card">
+          <h3>Yazılım Geliştirici</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <a href="#">Başvur</a>
+        </div>
+      </li>
+      <li>
+        <div class="job-card">
+          <h3>İnsan Kaynakları Uzmanı</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <a href="#">Başvur</a>
+        </div>
+      </li>
+      <li>
+        <div class="job-card">
+          <h3>Proje Yöneticisi</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <a href="#">Başvur</a>
+        </div>
+      </li>
+    </ul>
+  </main>
+
+  <footer>
+    <p>Telif Hakkı © 2023 İş İlanları</p>
+  </footer>
 </body>
 </html>

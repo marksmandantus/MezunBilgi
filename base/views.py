@@ -1,11 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect 
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import redirect 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from .models import Mezun , Mesaj
+from .models import Mezun , Mesaj, Etkinlikler
+from .forms import kaydet
+
 
 
 # Create your views here.
@@ -87,4 +88,47 @@ def registerPage(request):
 
 
 def edit_profile(request):
-    return render(request, 'edit_profile.html')
+    mezunlar = Mezun.objects.all()
+    context = {
+        'mezunlar': mezunlar
+    }
+    return render(request, 'guncelle.html' , context)
+
+def etkinlikler(request): 
+    etkinlikler = Etkinlikler.objects.all()
+    context = {
+        'etkinlikler': etkinlikler,
+    }
+    return render(request, 'etkinlikler.html', context)
+
+
+def etkinlik_detay(request, pk):
+    etkinlik = Etkinlikler.objects.get(pk=pk)
+    context = {
+        'etkinlik': etkinlik
+    }
+    return render(request, 'etkinlik_detay.html', context)
+
+
+def save_changes(request):
+    if request.method == 'POST':
+        form = kaydet(request.POST)
+        if form.is_valid():
+            # Form verilerini kaydetme işlemini burada gerçekleştirin
+            email = request.POST.get('email')
+            telefon = request.POST.get('telefon')
+            adres = request.POST.get('adres')
+
+            mezun = Mezun.objects.get(id=request.user.id)
+
+            mezun.email = email
+            mezun.telefon = telefon
+            mezun.adres = adres
+
+            mezun.save()
+           
+            return redirect('profile')
+    else:
+        form = kaydet()
+    
+    return render(request, 'guncelle.html', {'form': form})

@@ -1,13 +1,49 @@
 {% load static%}
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <title>Mezun Etkinlikleri</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'styles/activities.css' %}">
 </head>
 <body>
-    
+  <nav>
+    <div class="logo">
+        <a class="navbar-brand" href="/anasayfa/"><img src="{% static 'images/brand.svg'%}" alt="" class="brand-img"></a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/anasayfa/">Anasayfa</a></li>
+      <li><a href="/profile/">Profil</a></li>
+      <li><a href="/logout/">Çıkış Yap</a></li>
+    </ul>
+  </nav>
+
+  <header>
+    <h1>Mezun Etkinlikleri</h1>
+  </header>
+
+  <main>
+    {% for etkinlik in etkinlikler%}
+    <div class="event-card">
+      <div class="event-image">
+        <img src="{% static 'images/etkinlik-' %}{{ etkinlik.id }}.jpg" alt="Etkinlik Resmi">
+    </div>
+     
+      
+      <div class="event-details">
+        <h2>{{etkinlik.etkinlik_adi}}</h2>
+        <p>Tarih: {{etkinlik.etkinlik_tarihi}}</p>
+        <p>Yer: {{etkinlik.etkinlik_yeri}}</p>
+        <a href="#">Detaylar</a>
+      </div>
+       
+
+    </div>
+    {% endfor %}
+  </main>
+
+  <footer>
+    <p>Telif Hakkı © 2023 Mezun Etkinlikleri</p>
+  </footer>
 </body>
 </html>

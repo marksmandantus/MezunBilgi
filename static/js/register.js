@@ -4,10 +4,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var password1Input = document.getElementById('id_password1');
     var password2Input = document.getElementById('id_password2');
 
-    usernameInput.placeholder = 'Kullanıcı adı';
+    usernameInput.placeholder = 'TC Kimlik No';
     password2Input.placeholder = 'Şifre tekrarı';
     password1Input.placeholder = 'Şifre';
     emailInput.placeholder = 'E-posta';
+    
     
    
     
