@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -126,6 +128,8 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -139,5 +143,18 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'mkocadag214@gmail.com'
 EMAIL_HOST_PASSWORD = '!1qaz2WSX3edc4RFV%56&'
+
+#JAZZMIN CONFIGURATION
+
+JAZZMIN_SETTINGS = {
+    "site_icon": None,
+    "welcome_sign": "Mezun Bilgi Admin Paneli",
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "darkly",
+}
+
+
 
 

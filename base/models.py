@@ -14,6 +14,7 @@ class Mezun(models.Model):
     telefon = models.CharField(max_length=50, null=True, unique=True)
     adres = models.CharField(max_length=50, unique=True, null=True)
     profil = models.ImageField(null=True, blank=True, upload_to="profil/")
+    tc = models.CharField(max_length=50, null=True, unique=True)
 
     def __str__(self):
         return self.ad + ' ' + self.soyad

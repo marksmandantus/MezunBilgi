@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from .models import Mezun , Mesaj, Etkinlikler
-from .forms import kaydet
+from .forms import kaydet, RegistrationForm
 
 
 
