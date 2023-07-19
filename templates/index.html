@@ -5,8 +5,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mezun Bilgi Sistemi</title>
+  <title>{% block title %}Mezun Bilgi Sistemi{% endblock %}</title>
   <link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
   
 </head>
 <body>
@@ -15,31 +17,26 @@
   </header>
 
   <img src="{% static 'images/img2.jpg' %}" alt="Mezun Foto" class="logo">
+  
 
   <div class="container">
-    <div class="form-container">
-    <form action="/login" method="GET">
-
-        <input type="submit" value="Sisteme Giriş " class="giris">
-
-      </form>
-    </div>
 
     <div class="statistics-container">
       <p>Lisans Mezun Sayısı: <span id="lisans-mezun-sayisi">0</span></p>
       <p>Ön Lisans Mezun Sayısı: <span id="on-lisans-mezun-sayisi">0</span></p>
     </div>
+
+    <div class="form-container">
+      <form action="/login" method="GET">
+          <input type="submit" value="Sisteme Giriş " class="giris">
+      </form>
+    </div> 
   </div>
 
   <script>
-    // Burada veritabanından mezun öğrenci sayılarını alarak HTML sayfasına yerleştirme işlemleri gerçekleştirilebilir.
-    // Bu örnekte sadece HTML ve CSS olduğu için veritabanı entegrasyonu yerine sabit değerler kullanacağım.
-    
-    // Mezun öğrenci sayıları
     var lisansMezunSayisi = 100;
     var onLisansMezunSayisi = 50;
 
-    // HTML sayfasına mezun öğrenci sayılarını yerleştirme
     document.getElementById("lisans-mezun-sayisi").textContent = lisansMezunSayisi;
     document.getElementById("on-lisans-mezun-sayisi").textContent = onLisansMezunSayisi;
   </script>

@@ -16,6 +16,13 @@ body {
   .logo a {
     font-size: 24px;
     text-decoration: none;
+    background-color: transparent;
+  }
+  
+  .logo-img {
+    /* Set the desired width and height for the logo */
+    width: 100px;
+    height: 100px;
   }
   
   .nav-links {
@@ -95,8 +102,15 @@ body {
   }
   
   footer {
-    background-color: #333;
     color: #fff;
     padding: 20px;
     text-align: center;
+  }
+
+  .baslik{
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: bisque;
   }

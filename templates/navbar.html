@@ -1,4 +1,6 @@
 {% load static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 
 <nav id="scrollspy" class="navbar navbar-light bg-light navbar-expand-lg fixed-top" data-spy="affix" data-offset-top="20">
     <div class="container">
@@ -10,23 +12,24 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/anasayfa/">Home</a>
+                    <a class="nav-link" href="/anasayfa/"><i class="fas fa-home"></i>Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/is-ilanlari/">İş İlanları</a>
+                    <a class="nav-link" href="/is-ilanlari/"><i class="fa-solid fa-briefcase"></i>İş İlanları</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/etkinlikler/">Etkinlikler</a>
+                    <a class="nav-link" href="/etkinlikler/"><i class="fa-solid fa-square-person-confined"></i>Etkinlikler</a>
                 </li>
                 <li class="nav-item ml-0 ml-lg-4 dropdown">
                   <a class="nav-link btn btn-primary dropdown-toggle" href="#" id="profilDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Kullanıcı
                   </a>
                   <div class="dropdown-menu" aria-labelledby="profilDropdown">
-                    <a class="dropdown-item nav-link btn btn-primary" href="/profile/">Profil</a>
-                    <a class="dropdown-item nav-link btn btn-primary" href="/logout/">Çıkış Yap</a>
+                    <a class="dropdown-item nav-link btn btn-primary" href="/profile/"><i class="fas fa-user"></i>Profil</a>
+                    <a class="dropdown-item nav-link btn btn-primary" href="/logout/"><i class="fas fa-sign-out-alt"></i>Çıkış Yap</a>
                   </div>
               </li>
+
               
             </ul>
         </div>

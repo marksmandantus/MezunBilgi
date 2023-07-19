@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from .models import Mezun , Mesaj, Etkinlikler
-from .forms import kaydet, RegistrationForm
+from .models import Graduate , Mesaj, Event
+from .forms import kaydet , CustomUserCreationForm
 
 
 
@@ -21,7 +21,7 @@ def loginPage(request):
         password = request.POST.get('password')
 
         try:
-            user = Mezun.objects.get(username=username)
+            user = Graduate.objects.get(username=username)
 
         except:
             context['error_message'] = 'Kullanıcı adı veya şifre hatalı'
@@ -40,22 +40,35 @@ def loginPage(request):
 
 
 def profile(request):
-    mezunlar = Mezun.objects.all()
-    context = {
-        'mezunlar': mezunlar
-    }
-    return render(request, 'profile.html', context)
+    # Get the logged-in user's ID
+    user_id = request.user.id
+
+    # Query the logged-in user's data from the Graduate model
+    try:
+        user_profile = Graduate.objects.get(id=user_id)
+    except Graduate.DoesNotExist:
+        # Handle the case if the user doesn't exist in the database
+        user_profile = None
+
+    return render(request, 'profile.html', {'user_profile': user_profile})
+
+
+def edit_profile(request):
+     # Get the logged-in user's ID
+    user_id = request.user.id
+
+    # Query the logged-in user's data from the Graduate model
+    try:
+        user_profile = Graduate.objects.get(id=user_id)
+    except Graduate.DoesNotExist:
+        # Handle the case if the user doesn't exist in the database
+        user_profile = None
+
+    return render(request, 'guncelle.html', {'user_profile': user_profile})
 
 
 def anasayfa_view(request):
-    kullanici = Mezun.objects.all()
-    messages = Mesaj.objects.filter(mezun__in=kullanici)
-    context = {
-        'kullanici': kullanici,
-        'messages': messages
-    }
-    
-    return render(request, 'anasayfa.html', context)
+    return render(request, 'anasayfa.html')
 
 
 def logout_view(request):
@@ -67,13 +80,23 @@ def is_ilanlari(request):
     return render(request, 'is_ilanlari.html')
 
 def etkinlikler(request):
-    return render(request, 'etkinlikler.html')
+    etkinlikler = Event.objects.all()
+
+    return render(request, 'etkinlikler.html', {'etkinlikler': etkinlikler})
+
+
+def etkinlik_detay(request, pk):
+    etkinlik = Event.objects.get(pk=pk)
+    context = {
+        'etkinlik': etkinlik
+    }
+    return render(request, 'etkinlik_detay.html', context)
 
 def registerPage(request):
-    form = UserCreationForm()
+    form = CustomUserCreationForm()
 
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
 
         if form.is_valid():
             user = form.save(commit=False)
@@ -87,29 +110,6 @@ def registerPage(request):
     return render(request, 'register.html', {'form': form})
 
 
-def edit_profile(request):
-    mezunlar = Mezun.objects.all()
-    context = {
-        'mezunlar': mezunlar
-    }
-    return render(request, 'guncelle.html' , context)
-
-def etkinlikler(request): 
-    etkinlikler = Etkinlikler.objects.all()
-    context = {
-        'etkinlikler': etkinlikler,
-    }
-    return render(request, 'etkinlikler.html', context)
-
-
-def etkinlik_detay(request, pk):
-    etkinlik = Etkinlikler.objects.get(pk=pk)
-    context = {
-        'etkinlik': etkinlik
-    }
-    return render(request, 'etkinlik_detay.html', context)
-
-
 def save_changes(request):
     if request.method == 'POST':
         form = kaydet(request.POST)
@@ -119,13 +119,13 @@ def save_changes(request):
             telefon = request.POST.get('telefon')
             adres = request.POST.get('adres')
 
-            mezun = Mezun.objects.get(id=request.user.id)
+            Graduate = Graduate.objects.get(id=request.user.id)
 
-            mezun.email = email
-            mezun.telefon = telefon
-            mezun.adres = adres
+            Graduate.email = email
+            Graduate.telefon = telefon
+            Graduate.adres = adres
 
-            mezun.save()
+            Graduate.save()
            
             return redirect('profile')
     else:

@@ -5,19 +5,15 @@
 <head>
   <title>İş İlanları</title>
   <link rel="stylesheet" type="text/css" href="{% static 'styles/hire.css' %}">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+  <link rel="stylesheet" type="text/css" href="{% static 'styles/mezun.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 </head>
 <body>
-    <nav>
-        <div class="logo">
-            <a class="navbar-brand" href="/anasayfa/"><img src="{% static 'images/brand.svg'%}" alt="" class="brand-img"></a>
-        </div>
-        <ul class="nav-links">
-          <li><a href="/anasayfa/" class="nav-a" >Home</a></li>
-          <li><a href="/profile/" class="nav-a" >Profil</a></li>
-          <li><a href="/logout/" class="nav-a" >Çıkış Yap</a></li>
-        </ul>
-      </nav>
+    
+    {%include 'navbar.html'%}
 
   <main>
     <h2>Yeni İş İlanları</h2>
@@ -26,56 +22,55 @@
         <div class="job-card">
           <h3>Web Geliştirici</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <a href="#">Başvur</a>
+          <a href="#" class="btn btn-info">Başvur</a>
         </div>
       </li>
       <li>
         <div class="job-card">
           <h3>Grafik Tasarımcı</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <a href="#">Başvur</a>
+          <a href="#" class="btn btn-info">Başvur</a>
         </div>
       </li>
       <li>
         <div class="job-card">
           <h3>Pazarlama Uzmanı</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <a href="#">Başvur</a>
+          <a href="#" class="btn btn-info">Başvur</a>
         </div>
       </li>
       <li>
         <div class="job-card">
           <h3>Veri Bilimcisi</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <a href="#">Başvur</a>
+          <a href="#" class="btn btn-info">Başvur</a>
         </div>
       </li>
       <li>
         <div class="job-card">
           <h3>Yazılım Geliştirici</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <a href="#">Başvur</a>
+          <a href="#" class="btn btn-info">Başvur</a>
         </div>
       </li>
       <li>
         <div class="job-card">
           <h3>İnsan Kaynakları Uzmanı</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <a href="#">Başvur</a>
+          <a href="#" class="btn btn-info">Başvur</a>
         </div>
       </li>
       <li>
         <div class="job-card">
           <h3>Proje Yöneticisi</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          <a href="#">Başvur</a>
+          <a href="#" class="btn btn-info">Başvur</a>
         </div>
       </li>
     </ul>
   </main>
 
-  <footer>
-    <p>Telif Hakkı © 2023 İş İlanları</p>
-  </footer>
+  {% include 'footer.html' %}
+
 </body>
 </html>

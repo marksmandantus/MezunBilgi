@@ -1,7 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
-class Mezun(models.Model):
+
+class Graduate(models.Model):
     id = models.AutoField(primary_key=True)
     ad = models.CharField(max_length=50)
     soyad = models.CharField(max_length=50)
@@ -18,14 +18,15 @@ class Mezun(models.Model):
 
     def __str__(self):
         return self.ad + ' ' + self.soyad
+        
     
 
 class Mesaj(models.Model):
-    mezun = models.ForeignKey(Mezun, on_delete=models.CASCADE)
+    mezun = models.ForeignKey(Graduate, on_delete=models.CASCADE)
     icerik = models.TextField()
 
 
-class Etkinlikler(models.Model):
+class Event(models.Model):
     id: models.AutoField(primary_key=True)
     etkinlik_adi = models.CharField(max_length=50)
     etkinlik_tarihi = models.DateField()
