@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from .models import Graduate , Mesaj, Event
-from .forms import kaydet , CustomUserCreationForm
+from .models import Graduate , Message, Event
+from .forms import kaydet , AdminApprovedUserCreationForm
 
 
 
@@ -50,7 +50,16 @@ def profile(request):
         # Handle the case if the user doesn't exist in the database
         user_profile = None
 
-    return render(request, 'profile.html', {'user_profile': user_profile})
+    '''
+    OPSİYONEL
+    if request.user.is_authenticated:
+        user_profile = Graduate.objects.get_or_create(user=request.user)[0]
+    else:
+        user_profile = None
+    '''
+
+
+    return render(request, 'profile.html', {'user_profile': user_profile,})
 
 
 def edit_profile(request):
@@ -93,10 +102,10 @@ def etkinlik_detay(request, pk):
     return render(request, 'etkinlik_detay.html', context)
 
 def registerPage(request):
-    form = CustomUserCreationForm()
+    form = AdminApprovedUserCreationForm()
 
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = AdminApprovedUserCreationForm(request.POST)
 
         if form.is_valid():
             user = form.save(commit=False)
@@ -132,3 +141,8 @@ def save_changes(request):
         form = kaydet()
     
     return render(request, 'guncelle.html', {'form': form})
+
+
+def chat(request):
+    messages = Message.objects.all()
+    return render(request, 'header.html', {'messages': messages})   

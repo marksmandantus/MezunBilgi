@@ -32,8 +32,6 @@
                                 <p class="text-secondary mb-1">Bölüm: {{ user_profile.mezun_bolum | safe }}</p>
                                 <p class="text-secondary mb-1">Mezun Yılı: {{ user_profile.mezun_yili }}</p>
                                 <p class="text-secondary mb-1">Derece: {{ user_profile.mezun_derece }}</p>
-                                <button class="btn btn-primary">Takip Et</button>
-                                <button class="btn btn-outline-primary">Mesaj</button>
                             </div>
                            
 									
@@ -107,7 +105,7 @@
 									<h6 class="mb-0">TC Kimlik No</h6>
 								</div>
 								<div class="col-sm-9 text-secondary">
-									{{user_profile.tc}}
+									{{user_profile.tc_kimlik_no}}
 								</div>
 							</div>
 							<div class="row">

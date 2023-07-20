@@ -1,7 +1,8 @@
 from django import forms
 from django.core.validators import RegexValidator
-from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from .models import Graduate
+from django.contrib.auth.models import User
 
 
 class kaydet(forms.Form):
@@ -12,7 +13,7 @@ class kaydet(forms.Form):
     # Diğer alanlar
 
 
-class CustomUserCreationForm(UserCreationForm):
+class AdminApprovedUserCreationForm(UserCreationForm):
     tc_kimlik_no = forms.CharField(
         label='TC Kimlik No',
         validators=[
@@ -32,6 +33,12 @@ class CustomUserCreationForm(UserCreationForm):
         label='Şifre Tekrar',
         widget=forms.PasswordInput
     )
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("This username is already in use.")
+        return username
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')

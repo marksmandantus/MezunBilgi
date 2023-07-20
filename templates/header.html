@@ -18,6 +18,13 @@
     <div class="infos container mb-4 mb-md-2 comment-wrapper">
         <div class="title">
             <h6 class="subtitle font-weight-normal">Conversation</h6>
+            <hr>
+            {% for message in messages%}
+                        @{{message.user}}  {{message.created}}
+                    
+
+            {% endfor %}
+            <p></p>
         </div>
     </div>
 </header>

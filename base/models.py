@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Graduate(models.Model):
@@ -14,16 +15,21 @@ class Graduate(models.Model):
     telefon = models.CharField(max_length=50, null=True, unique=True)
     adres = models.CharField(max_length=50, unique=True, null=True)
     profil = models.ImageField(null=True, blank=True, upload_to="profil/")
-    tc = models.CharField(max_length=50, null=True, unique=True)
+    tc_kimlik_no = models.CharField(max_length=50, null=True, unique=True)
 
     def __str__(self):
         return self.ad + ' ' + self.soyad
         
-    
 
-class Mesaj(models.Model):
-    mezun = models.ForeignKey(Graduate, on_delete=models.CASCADE)
-    icerik = models.TextField()
+class Message(models.Model):
+    user = models.ForeignKey(Graduate, on_delete=models.CASCADE)
+    body = models.TextField()
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.body[0:50]
+
 
 
 class Event(models.Model):
