@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from .models import Graduate , Message, Event
+from .models import Graduate , Message, Event, FollowersAccount
 from .forms import kaydet , AdminApprovedUserCreationForm
 
 
@@ -43,6 +43,9 @@ def profile(request):
     # Get the logged-in user's ID
     user_id = request.user.id
 
+    current_user = request.GET.get('user')
+    logged_in_user = request.user.username
+
     # Query the logged-in user's data from the Graduate model
     try:
         user_profile = Graduate.objects.get(id=user_id)
@@ -58,8 +61,42 @@ def profile(request):
         user_profile = None
     '''
 
+    user_followers = len(FollowersAccount.objects.filter(user=current_user))
+    user_following = len(FollowersAccount.objects.filter(follower=current_user))
+    user_followers0 = FollowersAccount.objects.filter(user=current_user)
+    user_followers1 = []
 
-    return render(request, 'profile.html', {'user_profile': user_profile,})
+    for i in user_followers0:
+        user_followers0 = i.follower
+        user_followers1.append(user_followers0)
+
+    if logged_in_user in user_followers1:
+        follow_button_value = 'unfollow'
+    else:
+        follow_button_value = 'follow'
+
+    print(user_followers)
+
+    context = {'user_profile': user_profile,
+            'user_followers': user_followers,
+            'user_following': user_following,
+            'follow_button_value': follow_button_value,
+            'current_user': current_user,}
+
+    return render(request, 'profile.html', context)
+
+def followers_count(request):
+    if request.method == 'POST':
+        value = request.POST['value']
+        user = request.POST['user']
+        follower = request.POST['follower']
+        if value == 'follow':
+            followers_cnt = FollowersAccount.objects.create(user=user, follower=follower)
+            followers_cnt.save()
+        else:
+            followers_cnt = FollowersAccount.objects.get(user=user, follower=follower)
+            followers_cnt.delete()
+        return redirect('/?user='+user)
 
 
 def edit_profile(request):

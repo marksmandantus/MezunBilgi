@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Graduate, Event, Message
+from .models import Graduate, Event, Message, FollowersAccount
 
 class GraduateAdmin(admin.ModelAdmin):
     list_display = ('ad','soyad','mezun_bolum','mezun_yili','telefon','tc_kimlik_no')
@@ -22,6 +22,7 @@ class MessageAdmin(admin.ModelAdmin):
 admin.site.register(Graduate, GraduateAdmin)
 admin.site.register(Event,EventAdmin)
 admin.site.register(Message,MessageAdmin)
+admin.site.register(FollowersAccount)
 
 
 admin.site.site_title = 'Mezun Bilgi Sistemi'

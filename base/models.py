@@ -19,6 +19,14 @@ class Graduate(models.Model):
 
     def __str__(self):
         return self.ad + ' ' + self.soyad
+    
+
+class FollowersAccount(models.Model):
+    follower = models.CharField(max_length=1000)
+    user = models.CharField(max_length=1000)
+
+    def __str__(self):
+        return self.user
         
 
 class Message(models.Model):

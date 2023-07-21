@@ -32,8 +32,22 @@
                                 <p class="text-secondary mb-1">Bölüm: {{ user_profile.mezun_bolum | safe }}</p>
                                 <p class="text-secondary mb-1">Mezun Yılı: {{ user_profile.mezun_yili }}</p>
                                 <p class="text-secondary mb-1">Derece: {{ user_profile.mezun_derece }}</p>
-                                <button class="btn btn-primary">Takip Et</button>
-                                <button class="btn btn-outline-primary">Mesaj</button>
+                                <form action="followers_count" method="POST">
+                                    {% csrf_token %}        
+                                    <input type="hidden" name="user" value="{{current_user}}" readonly/>
+                                    <input type="hidden" name="follower" value="{{user.username}}" readonly/>
+                                    {% if follow_button_value == 'follow'%} 
+                                    <input type="hidden" name="value" value="follow" readonly/>                                               
+                                    <button type="submit" class="btn btn-primary">Takip Et</button>
+                                    {% else %}
+                                    <input type="hidden" name="value" value="unfollow" readonly/>                                               
+                                    <button type="submit" class="btn btn-primary">Takibi Bırak</button>
+                                    {% endif %}
+                                    <button type="submit" class="btn btn-outline-primary">Mesaj</button>
+                                </form>   
+                                <p class="text-secondary mb-1">Takipçi Sayısı: {{user_followers}}</p>   
+                                <p class="text-secondary mb-1">Takip Ettiklerim: {{user_following}}</p>                          
+                       
                             </div>
                             {% endif %}
                         </div>
