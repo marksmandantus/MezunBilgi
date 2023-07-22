@@ -33,7 +33,7 @@ class Person(AbstractBaseUser, PermissionsMixin):
     soyad = models.CharField(max_length=50)
     email = models.EmailField(max_length=50, null=True, unique=True)
     telefon = models.CharField(max_length=50, null=True, unique=True)
-    adres = models.CharField(max_length=50, unique=True, null=True)
+    adres = models.CharField(max_length=50, null=True)
     profil = models.ImageField(null=True, blank=True, upload_to="profil/")
     tc_kimlik_no = models.CharField(max_length=50, null=True, unique=True)
     cinsiyet = models.CharField(max_length=50, null=True)

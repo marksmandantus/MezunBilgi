@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Graduate , Message, Event, FollowersAccount, Person
 from .forms import kaydet 
 from django.http import HttpResponse
-from .forms import RegistrationForm
+from .forms import RegistrationForm, GraduateForm
 
 
 
@@ -155,17 +155,31 @@ def registerPage(request, *args, **kwargs):
 
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-        if form.is_valid():
-            form.save()
+        graduate_form = GraduateForm(request.POST)
+        if form.is_valid() and graduate_form.is_valid():
+            user = form.save(commit=False)  # Save the user form without committing to the database
+            user.save()  # Now, save the user to the database
+
+            graduate = graduate_form.save(commit=False)  # Save the graduate form without committing to the database
+            graduate.person = user  # Set the 'person' field to the newly created user
+            graduate.save()  # Now, save the graduate to the database
             email = form.cleaned_data.get('email').lower()
             raw_password = form.cleaned_data.get('password1')
             tc_kimlik_no = form.cleaned_data.get('tc_kimlik_no')
-            account = authenticate(email=email, password=raw_password, tc_kimlik_no=tc_kimlik_no)
+            ad = form.cleaned_data.get('ad')
+            soyad = form.cleaned_data.get('soyad')
+            telefon = form.cleaned_data.get('telefon')
+            username = form.cleaned_data.get('username')
+            mezun_yili = graduate_form.cleaned_data.get('mezun_yili')
+            mezun_bolum = graduate_form.cleaned_data.get('mezun_bolum')
+            mezun_derece = graduate_form.cleaned_data.get('mezun_derece')
+            account = authenticate(email=email, password=raw_password, tc_kimlik_no=tc_kimlik_no, ad=ad, soyad=soyad, telefon=telefon, username=username,
+                                   mezun_yili=mezun_yili, mezun_bolum=mezun_bolum, mezun_derece=mezun_derece)
             login(request,account)
             destination = kwargs.get("next")
             if destination:
                 return redirect(destination)
-            return redirect('index')
+            return redirect('login')
         else:
             context['registration_form'] = form
 

@@ -33,10 +33,47 @@
                     <h2 class="text-center mb-4">Kayıt Ol</h2>
                     <form method="POST" action="">
                         {% csrf_token %}  
+                        <input type="text" name="ad" placeholder="İsim" id="inputName" class="form-control mb-3" required >
+                        <input type="text" name="soyad" placeholder="Soyisim" id="inputSurname" class="form-control mb-3" required >
+                        <input type="number" name="telefon" placeholder="Telefon Numarası" id="inputNumber" class="form-control mb-3" required >
                         <input type="email" name="email" placeholder="Email" id="inputEmail" class="form-control mb-3" required >
+                        <input type="text" name="username" placeholder="Kullanıcı Adı" id="inputUsername" class="form-control mb-3" required >
                         <input type="number" name="tc_kimlik_no" placeholder="TC Kimlik No" id="inputTC" class="form-control mb-3" required >
                         <input type="password" name="password1"  id="inputPassword1" class="form-control mb-3" required >
                         <input type="password" name="password2"  id="inputPassword2" class="form-control mb-3" required >
+
+                        <div class="form-group">
+                            <label for="meslek">Mezun Olduğunuz Meslek</label>
+                            <select id="meslek" name="mezun_bolum" class="form-control" required>
+                                <option value="" selected disabled>Mezun olduğunuz meslek</option>
+                                <option value="Mühendis">Mühendis</option>
+                                <option value="Öğretmen">Öğretmen</option>
+                                <option value="Doktor">Doktor</option>
+                                <option value="Avukat">Avukat</option>
+                                <option value="Yazılım Geliştirici">Yazılım Geliştirici</option>
+                                <option value="Eczacı">Eczacı</option>
+                                <option value="Veteriner">Veteriner</option>
+                                <option value="Mimar">Mimar</option>
+                                <option value="Diş Hekimi">Diş Hekimi</option>
+                                <option value="Eğitmen">Eğitmen</option>
+                                <option value="Hemşire">Hemşire</option>
+                                <option value="Grafik Tasarımcı">Grafik Tasarımcı</option>
+                                <option value="Yönetici">Yönetici</option>
+                                <option value="Tıp Teknikeri">Tıp Teknikeri</option>
+                                <option value="Yazı İşleri Müdürü">Yazı İşleri Müdürü</option>
+                                <option value="Odyolog">Odyolog</option>
+                                <option value="Biyomedikal Mühendisi">Biyomedikal Mühendisi</option>
+                                <option value="Sosyal Medya Uzmanı">Sosyal Medya Uzmanı</option>
+                                <option value="Havacılık Uzmanı">Havacılık Uzmanı</option>
+                                <option value="İç Mimar">İç Mimar</option>
+                            </select>
+                        </div>
+                        <br>
+
+                        <input type="number" name="mezun_derece" placeholder="Ortalamanız" id="inputOrtalama" class="form-control mb-3" required >
+                        <input type="number" name="mezun_yili" placeholder="Mezun Yılı" id="inputYil" class="form-control mb-3" required >
+
+
                         
                         {% for field in registration_form %}
                         <p>
