@@ -8,8 +8,13 @@ from .forms import RegistrationForm, GraduateForm
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404
 
-
 def view_profile(request, username):
+    username = request.GET.get('username')
+    if username:
+        try:
+            profile = Person.objects.get(username=username)
+        except Person.DoesNotExist:
+            profile = None
     try:
         # Query the user's data from the Person model
         user_profile = get_object_or_404(Person, username=username)
@@ -25,6 +30,7 @@ def view_profile(request, username):
         context = {
             'user_profile': user_profile,
             'graduate_profile': graduate_profile,
+            'profile' : profile,
         }
 
         return render(request, 'view_profile.html', context)

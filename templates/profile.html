@@ -18,6 +18,15 @@
   {% include 'navbar.html' %}
   
   <br><br><br>
+
+  <div class="container mt-3">
+    <form action="{% url 'view_profile' 'username' %}" method="GET">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" name="username" placeholder="Kullanıcı adıyla arama yap..." aria-label="Arama yap" aria-describedby="search-btn">
+            <button class="btn btn-outline-primary" type="submit" id="search-btn">Ara</button>
+        </div>
+    </form>
+</div>
   
   <div class="container">
     <div class="main-body">

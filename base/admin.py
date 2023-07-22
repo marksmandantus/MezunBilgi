@@ -5,9 +5,9 @@ from .models import Graduate, Event, Message, FollowersAccount, Person
 
 
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ('ad', 'soyad', 'email', 'telefon', 'adres', 'tc_kimlik_no','cinsiyet', 'profil', 'is_admin', 'is_active', 'is_staff', 'is_superuser')
-    list_filter = ('ad','soyad','tc_kimlik_no')
-    list_display_links = ('ad', 'soyad', 'tc_kimlik_no')  # Bu alanlar üzerine tıklandığında düzenleme ekranı açılacak
+    list_display = ('ad', 'soyad', 'email', 'username', 'telefon', 'adres', 'tc_kimlik_no','cinsiyet', 'profil', 'is_admin', 'is_active', 'is_staff', 'is_superuser')
+    list_filter = ('ad','soyad','tc_kimlik_no', 'username')
+    list_display_links = ('ad', 'soyad', 'tc_kimlik_no', 'username')  # Bu alanlar üzerine tıklandığında düzenleme ekranı açılacak
     ordering = ('ad',)
     search_fields = ('tc_kimlik_no',)
 

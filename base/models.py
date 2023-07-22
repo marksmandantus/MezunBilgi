@@ -37,6 +37,14 @@ class Person(AbstractBaseUser, PermissionsMixin):
     profil = models.ImageField(null=True, blank=True, upload_to="profil/")
     tc_kimlik_no = models.CharField(max_length=50, null=True, unique=True)
     cinsiyet = models.CharField(max_length=50, null=True)
+    dogum_tarihi = models.DateField(null=True)
+    universite = models.CharField(max_length=50, null=True)
+    website = models.CharField(max_length=50, null=True)
+    facebook = models.CharField(max_length=50, null=True)
+    twitter = models.CharField(max_length=50, null=True)
+    instagram = models.CharField(max_length=50, null=True)
+    linkedin = models.CharField(max_length=50, null=True)
+    github = models.CharField(max_length=50, null=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -63,9 +71,9 @@ class Graduate(models.Model):
     mezun_yili = models.IntegerField()
     mezun_bolum = models.CharField(max_length=50)
     mezun_derece = models.CharField(max_length=50)
-    lisans = models.CharField(max_length=50)
-    on_lisans = models.CharField(max_length=50)
-    yuksek_lisans = models.CharField(max_length=50)
+    lisans = models.BooleanField(default=False)
+    on_lisans = models.BooleanField(default=False)
+    yuksek_lisans = models.BooleanField(default=False)
 
     def __str__(self):
         return self.person.ad + ' ' + self.person.soyad
