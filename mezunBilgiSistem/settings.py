@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
+    'job.apps.JobConfig',
     ]
 
 AUTH_USER_MODEL = 'base.Person'

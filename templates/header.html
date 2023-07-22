@@ -17,14 +17,16 @@
 
     <div class="infos container mb-4 mb-md-2 comment-wrapper">
         <div class="title">
+            {% if user.is_authenticated %}
             <h6 class="subtitle font-weight-normal">Conversation</h6>
             <hr>
             {% for message in messages%}
-                        @{{message.user}}  {{message.created}}
-                    
-
+                @{{message.user}}  {{message.created}}
             {% endfor %}
             <p></p>
+            {% else %}
+            <p>Diğer kullanıcılarla mesajlaşmak için giriş yapmalısın.</p>
+            {% endif %}
         </div>
     </div>
 </header>

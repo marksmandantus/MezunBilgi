@@ -1,18 +1,37 @@
 from django.shortcuts import render, redirect 
-from django.contrib.auth.models import User
-from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from .models import Graduate , Message, Event, FollowersAccount, Person
 from .forms import kaydet 
-from django.http import HttpResponse
 from .forms import RegistrationForm, GraduateForm
+from django.shortcuts import render, get_object_or_404
+from django.http import Http404
 
 
+def view_profile(request, username):
+    try:
+        # Query the user's data from the Person model
+        user_profile = get_object_or_404(Person, username=username)
 
+        # Assuming you have a 'Graduate' model for each user's graduation information
+        try:
+            graduate_profile = Graduate.objects.get(person=user_profile)
+        except Graduate.DoesNotExist:
+            graduate_profile = None
 
-# Create your views here.
+        # Rest of your code for the view_other_profile...
+
+        context = {
+            'user_profile': user_profile,
+            'graduate_profile': graduate_profile,
+        }
+
+        return render(request, 'view_profile.html', context)
+
+    except Http404:
+        # If no user is found with the given username, render an error page
+        return render(request, 'user_not_found.html')
 
 def index(request):
     return render(request, 'index.html')
@@ -58,16 +77,6 @@ def profile(request):
         graduate_profile = None
     except Graduate.DoesNotExist:
         graduate_profile = None
-
-
-
-    '''
-    OPSİYONEL
-    if request.user.is_authenticated:
-        user_profile = Graduate.objects.get_or_create(user=request.user)[0]
-    else:
-        user_profile = None
-    '''
 
     user_followers = len(FollowersAccount.objects.filter(user=current_user))
     user_following = len(FollowersAccount.objects.filter(follower=current_user))
@@ -130,9 +139,6 @@ def logout_view(request):
     logout(request)
     return redirect('index')
 
-
-def is_ilanlari(request):
-    return render(request, 'is_ilanlari.html')
 
 def etkinlikler(request):
     etkinlikler = Event.objects.all()

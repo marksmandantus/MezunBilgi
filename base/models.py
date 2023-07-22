@@ -63,6 +63,9 @@ class Graduate(models.Model):
     mezun_yili = models.IntegerField()
     mezun_bolum = models.CharField(max_length=50)
     mezun_derece = models.CharField(max_length=50)
+    lisans = models.CharField(max_length=50)
+    on_lisans = models.CharField(max_length=50)
+    yuksek_lisans = models.CharField(max_length=50)
 
     def __str__(self):
         return self.person.ad + ' ' + self.person.soyad
