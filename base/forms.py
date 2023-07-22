@@ -1,8 +1,33 @@
 from django import forms
-from django.core.validators import RegexValidator
 from django.contrib.auth.forms import UserCreationForm
-from .models import Graduate
+from django.contrib.auth import authenticate
+from .models import Person
+
 from django.contrib.auth.models import User
+
+
+class RegistrationForm(UserCreationForm):
+    email = forms.EmailField(max_length=60, help_text='Required. Add a valid email address')
+
+    class Meta:
+        model = Person
+        fields = ('email', 'tc_kimlik_no', 'password1', 'password2')
+
+    def clean_email(self):
+        email = self.cleaned_data['email'].lower()
+        try:
+            user = Person.objects.get(email=email)
+        except Exception as e:
+            return email
+        raise forms.ValidationError(f'Email {email} already in use.')
+    
+    def clean_tc_kimlik_no(self):
+        tc_kimlik_no = self.cleaned_data['tc_kimlik_no']
+        try:
+            user = Person.objects.get(tc_kimlik_no=tc_kimlik_no)
+        except Exception as e:
+            return tc_kimlik_no
+        raise forms.ValidationError(f'TC kimlik numarası {tc_kimlik_no} already in use.')
 
 
 class kaydet(forms.Form):
@@ -13,40 +38,4 @@ class kaydet(forms.Form):
     # Diğer alanlar
 
 
-class AdminApprovedUserCreationForm(UserCreationForm):
-    tc_kimlik_no = forms.CharField(
-        label='TC Kimlik No',
-        validators=[
-            RegexValidator(
-                regex='^[0-9]{11}$',
-                message='TC Kimlik No sadece rakamlardan oluşmalıdır.',
-                code='invalid_tc_kimlik_no'
-            ),
-        ]
-    )
 
-    password1 = forms.CharField(
-        label='Şifre',
-        widget=forms.PasswordInput
-    )
-    password2 = forms.CharField(
-        label='Şifre Tekrar',
-        widget=forms.PasswordInput
-    )
-
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        if User.objects.filter(username=username).exists():
-            raise forms.ValidationError("This username is already in use.")
-        return username
-
-    def clean_password2(self):
-        password1 = self.cleaned_data.get('password1')
-        password2 = self.cleaned_data.get('password2')
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Şifreler eşleşmiyor.")
-        return password2
-
-    class Meta:
-        model = User  # User modelini buraya ekleyin
-        fields = ('tc_kimlik_no', 'password1', 'password2')  # Diğer form alanlarını buraya ekleyin

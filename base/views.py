@@ -4,8 +4,11 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from .models import Graduate , Message, Event, FollowersAccount
-from .forms import kaydet , AdminApprovedUserCreationForm
+from .models import Graduate , Message, Event, FollowersAccount, Person
+from .forms import kaydet 
+from django.http import HttpResponse
+from .forms import RegistrationForm
+
 
 
 
@@ -17,17 +20,17 @@ def index(request):
 def loginPage(request):
     context = {}
     if request.method == 'POST':
-        username = request.POST.get('username')
+        tc_kimlik_no = request.POST.get('tc_kimlik_no')
         password = request.POST.get('password')
 
         try:
-            user = Graduate.objects.get(username=username)
+            user = Person.objects.get(tc_kimlik_no=tc_kimlik_no)
 
         except:
             context['error_message'] = 'Kullanıcı adı veya şifre hatalı'
 
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, tc_kimlik_no=tc_kimlik_no, password=password)
 
         if user is not None:
             login(request, user)
@@ -44,14 +47,19 @@ def profile(request):
     user_id = request.user.id
 
     current_user = request.GET.get('user')
-    logged_in_user = request.user.username
+    # logged_in_user = request.user.username(email)
 
     # Query the logged-in user's data from the Graduate model
     try:
-        user_profile = Graduate.objects.get(id=user_id)
-    except Graduate.DoesNotExist:
-        # Handle the case if the user doesn't exist in the database
+        user_profile = Person.objects.get(id=user_id)
+        graduate_profile = Graduate.objects.get(person=user_profile)
+    except Person.DoesNotExist:
         user_profile = None
+        graduate_profile = None
+    except Graduate.DoesNotExist:
+        graduate_profile = None
+
+
 
     '''
     OPSİYONEL
@@ -70,18 +78,19 @@ def profile(request):
         user_followers0 = i.follower
         user_followers1.append(user_followers0)
 
-    if logged_in_user in user_followers1:
+    """if logged_in_user in user_followers1:
         follow_button_value = 'unfollow'
     else:
         follow_button_value = 'follow'
 
-    print(user_followers)
+    print(user_followers)"""
 
     context = {'user_profile': user_profile,
             'user_followers': user_followers,
             'user_following': user_following,
-            'follow_button_value': follow_button_value,
-            'current_user': current_user,}
+            #'follow_button_value': follow_button_value,
+            'current_user': current_user,
+            'graduate_profile': graduate_profile,}
 
     return render(request, 'profile.html', context)
 
@@ -105,8 +114,8 @@ def edit_profile(request):
 
     # Query the logged-in user's data from the Graduate model
     try:
-        user_profile = Graduate.objects.get(id=user_id)
-    except Graduate.DoesNotExist:
+        user_profile = Person.objects.get(id=user_id)
+    except Person.DoesNotExist:
         # Handle the case if the user doesn't exist in the database
         user_profile = None
 
@@ -138,22 +147,29 @@ def etkinlik_detay(request, pk):
     }
     return render(request, 'etkinlik_detay.html', context)
 
-def registerPage(request):
-    form = AdminApprovedUserCreationForm()
+def user_not_authenticated(user):
+    return not user.is_authenticated
+
+def registerPage(request, *args, **kwargs):
+    context = {}
 
     if request.method == 'POST':
-        form = AdminApprovedUserCreationForm(request.POST)
-
+        form = RegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.save()
-            messages.success(request, 'Hesabınız oluşturuldu')
-            return redirect('login')
-        
+            form.save()
+            email = form.cleaned_data.get('email').lower()
+            raw_password = form.cleaned_data.get('password1')
+            tc_kimlik_no = form.cleaned_data.get('tc_kimlik_no')
+            account = authenticate(email=email, password=raw_password, tc_kimlik_no=tc_kimlik_no)
+            login(request,account)
+            destination = kwargs.get("next")
+            if destination:
+                return redirect(destination)
+            return redirect('index')
         else:
-            messages.error(request, 'Hesabınız oluşturulamadı')
+            context['registration_form'] = form
 
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'register.html', context)
 
 
 def save_changes(request):

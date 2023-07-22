@@ -1,11 +1,22 @@
 from django.contrib import admin
-from .models import Graduate, Event, Message, FollowersAccount
+from django.contrib.auth.admin import UserAdmin
+from .models import Graduate, Event, Message, FollowersAccount, Person
+
+
+
+class PersonAdmin(admin.ModelAdmin):
+    list_display = ('ad', 'soyad', 'email', 'telefon', 'adres', 'tc_kimlik_no','cinsiyet', 'profil', 'is_admin', 'is_active', 'is_staff', 'is_superuser')
+    list_filter = ('ad','soyad','tc_kimlik_no')
+    list_display_links = ('ad', 'soyad', 'tc_kimlik_no')  # Bu alanlar üzerine tıklandığında düzenleme ekranı açılacak
+    ordering = ('ad',)
+    search_fields = ('tc_kimlik_no',)
+
 
 class GraduateAdmin(admin.ModelAdmin):
-    list_display = ('ad','soyad','mezun_bolum','mezun_yili','telefon','tc_kimlik_no')
-    list_filter = ('mezun_yili','mezun_bolum','ad','soyad','tc_kimlik_no')
+    list_display = ('mezun_yili', 'mezun_bolum', 'mezun_derece')
+    list_filter = ('mezun_yili','mezun_bolum')
     ordering = ('mezun_yili',)
-    search_fields = ('mezun_yili','mezun_bolum','ad','soyad','tc_kimlik_no',)
+    search_fields = ('mezun_yili','mezun_bolum',)
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -20,6 +31,7 @@ class MessageAdmin(admin.ModelAdmin):
     search_fields = ('user','body',)
 
 admin.site.register(Graduate, GraduateAdmin)
+admin.site.register(Person, PersonAdmin)
 admin.site.register(Event,EventAdmin)
 admin.site.register(Message,MessageAdmin)
 admin.site.register(FollowersAccount)

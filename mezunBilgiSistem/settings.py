@@ -13,6 +13,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
+
 INSTALLED_APPS = [
     'jazzmin',
     'django.contrib.admin',
@@ -22,8 +24,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
-    'channels',
-]
+    ]
+
+AUTH_USER_MODEL = 'base.Person'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
