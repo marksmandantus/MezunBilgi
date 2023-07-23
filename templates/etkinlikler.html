@@ -3,7 +3,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mezun Etkinlikleri</title>
+  <title>{% block title %} Mezun Etkinlikleri{% endblock %}</title>
+
   <link rel="stylesheet" type="text/css" href="{% static 'styles/activities.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'styles/mezun.css' %}">
 
@@ -37,6 +38,8 @@
       </div>
     </div>
   </main>
+
+  {% include 'footer.html' %}
 
   
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -40,7 +40,16 @@ def view_profile(request, username):
         return render(request, 'user_not_found.html')
 
 def index(request):
-    return render(request, 'index.html')
+    lisans_mezun_sayisi = Graduate.objects.filter(lisans=True).count()
+    on_lisans_mezun_sayisi = Graduate.objects.filter(on_lisans=True).count()
+    yuksek_lisans_mezun_sayisi = Graduate.objects.filter(yuksek_lisans=True).count()
+
+    context = {
+        'lisans_mezun_sayisi': lisans_mezun_sayisi,
+        'on_lisans_mezun_sayisi': on_lisans_mezun_sayisi,
+        'yuksek_lisans_mezun_sayisi': yuksek_lisans_mezun_sayisi,
+    }
+    return render(request, 'index.html', context)
 
 def loginPage(request):
     context = {}
