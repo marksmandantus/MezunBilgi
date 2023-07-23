@@ -29,7 +29,7 @@
               <h2>{{ etkinlik.etkinlik_adi }}</h2>
               <p>Tarih: {{ etkinlik.etkinlik_tarihi }}</p>
               <p>Yer: {{ etkinlik.etkinlik_yeri }}</p>
-              <a href="#">Detaylar</a>
+              <a href="{% url 'etkinlik_detay' etkinlik.id %}">Detaylar</a>
             </div>
           </div>
         </div>

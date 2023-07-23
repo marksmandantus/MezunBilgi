@@ -127,14 +127,17 @@ def edit_profile(request):
      # Get the logged-in user's ID
     user_id = request.user.id
 
-    # Query the logged-in user's data from the Graduate model
     try:
         user_profile = Person.objects.get(id=user_id)
+        graduate_profile = Graduate.objects.get(person=user_profile)
     except Person.DoesNotExist:
-        # Handle the case if the user doesn't exist in the database
         user_profile = None
+        graduate_profile = None
+    except Graduate.DoesNotExist:
+        graduate_profile = None
 
-    return render(request, 'guncelle.html', {'user_profile': user_profile})
+    return render(request, 'guncelle.html', {'user_profile': user_profile,
+                                             'graduate_profile': graduate_profile})
 
 
 def anasayfa_view(request):

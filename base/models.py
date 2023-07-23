@@ -99,7 +99,7 @@ class Message(models.Model):
 
 
 class Event(models.Model):
-    id: models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     etkinlik_adi = models.CharField(max_length=50)
     etkinlik_tarihi = models.DateField()
     etkinlik_yeri = models.CharField(max_length=50)
