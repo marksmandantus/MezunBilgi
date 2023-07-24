@@ -30,22 +30,24 @@ class University(models.Model):
 
 class PersonManager(BaseUserManager):
     
-    def create_user(self,tc_kimlik_no,password=None):
+    def create_user(self,tc_kimlik_no,username, password=None, ):
         if not tc_kimlik_no:
             raise ValueError("TC kimlik numarası boş bırakılamaz!")
         
         user = self.model(
             tc_kimlik_no = tc_kimlik_no,
+            username = username,
 
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
     
-    def create_superuser(self,tc_kimlik_no,password):
+    def create_superuser(self,tc_kimlik_no,password, username):
         user = self.create_user(
             tc_kimlik_no = tc_kimlik_no,
             password = password,
+            username = username,
         )
         user.is_admin = True
         user.is_staff = True
