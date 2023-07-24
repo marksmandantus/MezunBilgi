@@ -8,37 +8,6 @@ from .forms import RegistrationForm, GraduateForm
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404
 
-def view_profile(request, username):
-    username = request.GET.get('username')
-    if username:
-        try:
-            profile = Person.objects.get(username=username)
-        except Person.DoesNotExist:
-            profile = None
-    try:
-        # Query the user's data from the Person model
-        user_profile = get_object_or_404(Person, username=username)
-
-        # Assuming you have a 'Graduate' model for each user's graduation information
-        try:
-            graduate_profile = Graduate.objects.get(person=user_profile)
-        except Graduate.DoesNotExist:
-            graduate_profile = None
-
-        # Rest of your code for the view_other_profile...
-
-        context = {
-            'user_profile': user_profile,
-            'graduate_profile': graduate_profile,
-            'profile' : profile,
-        }
-
-        return render(request, 'view_profile.html', context)
-
-    except Http404:
-        # If no user is found with the given username, render an error page
-        return render(request, 'user_not_found.html')
-
 def index(request):
     lisans_mezun_sayisi = Graduate.objects.filter(lisans=True).count()
     on_lisans_mezun_sayisi = Graduate.objects.filter(on_lisans=True).count()
@@ -50,6 +19,11 @@ def index(request):
         'yuksek_lisans_mezun_sayisi': yuksek_lisans_mezun_sayisi,
     }
     return render(request, 'index.html', context)
+
+
+def user_not_authenticated(user):
+    return not user.is_authenticated
+
 
 def loginPage(request):
     context = {}
@@ -74,6 +48,53 @@ def loginPage(request):
             return redirect('login')
             
     return render(request, 'login.html', context)
+
+
+def registerPage(request, *args, **kwargs):
+    context = {}
+
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        graduate_form = GraduateForm(request.POST)
+        if form.is_valid() and graduate_form.is_valid():
+            user = form.save(commit=False)  # Save the user form without committing to the database
+            user.save()  # Now, save the user to the database
+
+            graduate = graduate_form.save(commit=False)  # Save the graduate form without committing to the database
+            graduate.person = user  # Set the 'person' field to the newly created user
+            graduate.save()  # Now, save the graduate to the database
+            email = form.cleaned_data.get('email').lower()
+            raw_password = form.cleaned_data.get('password1')
+            tc_kimlik_no = form.cleaned_data.get('tc_kimlik_no')
+            ad = form.cleaned_data.get('ad')
+            soyad = form.cleaned_data.get('soyad')
+            telefon = form.cleaned_data.get('telefon')
+            username = form.cleaned_data.get('username')
+            mezun_yili = graduate_form.cleaned_data.get('mezun_yili')
+            mezun_bolum = graduate_form.cleaned_data.get('mezun_bolum')
+            mezun_derece = graduate_form.cleaned_data.get('mezun_derece')
+            universite = form.cleaned_data.get('universite')
+            account = authenticate(email=email, password=raw_password, tc_kimlik_no=tc_kimlik_no, ad=ad, soyad=soyad, telefon=telefon, username=username,
+                                   mezun_yili=mezun_yili, mezun_bolum=mezun_bolum, mezun_derece=mezun_derece, universite=universite)
+            if account is not None:
+                login(request, account)
+                destination = kwargs.get("next")
+                if destination:
+                    return redirect(destination)
+                return redirect('login')   
+            else:
+                context['registration_form'] = form
+
+    return render(request, 'register.html', context)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('index')
+
+
+def anasayfa_view(request):
+    return render(request, 'anasayfa.html')
 
 
 def profile(request):
@@ -118,18 +139,37 @@ def profile(request):
 
     return render(request, 'profile.html', context)
 
-def followers_count(request):
-    if request.method == 'POST':
-        value = request.POST['value']
-        user = request.POST['user']
-        follower = request.POST['follower']
-        if value == 'follow':
-            followers_cnt = FollowersAccount.objects.create(user=user, follower=follower)
-            followers_cnt.save()
-        else:
-            followers_cnt = FollowersAccount.objects.get(user=user, follower=follower)
-            followers_cnt.delete()
-        return redirect('/?user='+user)
+
+def view_profile(request, username):
+    username = request.GET.get('username')
+    if username:
+        try:
+            profile = Person.objects.get(username=username)
+        except Person.DoesNotExist:
+            profile = None
+    try:
+        # Query the user's data from the Person model
+        user_profile = get_object_or_404(Person, username=username)
+
+        # Assuming you have a 'Graduate' model for each user's graduation information
+        try:
+            graduate_profile = Graduate.objects.get(person=user_profile)
+        except Graduate.DoesNotExist:
+            graduate_profile = None
+
+        # Rest of your code for the view_other_profile...
+
+        context = {
+            'user_profile': user_profile,
+            'graduate_profile': graduate_profile,
+            'profile' : profile,
+        }
+
+        return render(request, 'view_profile.html', context)
+
+    except Http404:
+        # If no user is found with the given username, render an error page
+        return render(request, 'user_not_found.html')
 
 
 def edit_profile(request):
@@ -149,18 +189,8 @@ def edit_profile(request):
                                              'graduate_profile': graduate_profile})
 
 
-def anasayfa_view(request):
-    return render(request, 'anasayfa.html')
-
-
-def logout_view(request):
-    logout(request)
-    return redirect('index')
-
-
 def etkinlikler(request):
     etkinlikler = Event.objects.all()
-
     return render(request, 'etkinlikler.html', {'etkinlikler': etkinlikler})
 
 
@@ -171,43 +201,19 @@ def etkinlik_detay(request, pk):
     }
     return render(request, 'etkinlik_detay.html', context)
 
-def user_not_authenticated(user):
-    return not user.is_authenticated
 
-def registerPage(request, *args, **kwargs):
-    context = {}
-
+def followers_count(request):
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
-        graduate_form = GraduateForm(request.POST)
-        if form.is_valid() and graduate_form.is_valid():
-            user = form.save(commit=False)  # Save the user form without committing to the database
-            user.save()  # Now, save the user to the database
-
-            graduate = graduate_form.save(commit=False)  # Save the graduate form without committing to the database
-            graduate.person = user  # Set the 'person' field to the newly created user
-            graduate.save()  # Now, save the graduate to the database
-            email = form.cleaned_data.get('email').lower()
-            raw_password = form.cleaned_data.get('password1')
-            tc_kimlik_no = form.cleaned_data.get('tc_kimlik_no')
-            ad = form.cleaned_data.get('ad')
-            soyad = form.cleaned_data.get('soyad')
-            telefon = form.cleaned_data.get('telefon')
-            username = form.cleaned_data.get('username')
-            mezun_yili = graduate_form.cleaned_data.get('mezun_yili')
-            mezun_bolum = graduate_form.cleaned_data.get('mezun_bolum')
-            mezun_derece = graduate_form.cleaned_data.get('mezun_derece')
-            account = authenticate(email=email, password=raw_password, tc_kimlik_no=tc_kimlik_no, ad=ad, soyad=soyad, telefon=telefon, username=username,
-                                   mezun_yili=mezun_yili, mezun_bolum=mezun_bolum, mezun_derece=mezun_derece)
-            login(request,account)
-            destination = kwargs.get("next")
-            if destination:
-                return redirect(destination)
-            return redirect('login')
+        value = request.POST['value']
+        user = request.POST['user']
+        follower = request.POST['follower']
+        if value == 'follow':
+            followers_cnt = FollowersAccount.objects.create(user=user, follower=follower)
+            followers_cnt.save()
         else:
-            context['registration_form'] = form
-
-    return render(request, 'register.html', context)
+            followers_cnt = FollowersAccount.objects.get(user=user, follower=follower)
+            followers_cnt.delete()
+        return redirect('/?user='+user)
 
 
 def save_changes(request):

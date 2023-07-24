@@ -1,0 +1,20 @@
+body {
+    margin-bottom: 80px; /* Add margin to the bottom of the body to create space for the footer */
+  }
+
+  .footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #343a40; /* Change the background color as needed */
+    color: white; /* Change the text color as needed */
+    padding: 20px 0;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  /* Additional styles for footer content */
+  .footer h3 {
+    color: #ccc;
+  }

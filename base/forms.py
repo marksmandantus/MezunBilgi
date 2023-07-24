@@ -14,7 +14,7 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = Person
-        fields = ('email', 'ad', 'soyad', 'telefon', 'password1', 'password2', 'tc_kimlik_no')
+        fields = ('email', 'ad', 'soyad', 'telefon', 'password1', 'password2', 'tc_kimlik_no', 'universite')
 
     def clean_email(self):
         email = self.cleaned_data['email'].lower()
@@ -34,28 +34,30 @@ class RegistrationForm(UserCreationForm):
     
     def clean_telefon(self):
         telefon = self.cleaned_data['telefon']
-        # Gerekirse telefon numarası için özel doğrulama kurallarını buraya ekleyin
+        # ÖZEL DOĞRULAMALAR BURAYA
         return telefon
 
     def clean_ad(self):
         ad = self.cleaned_data['ad']
-        # Gerekirse ad için özel doğrulama kurallarını buraya ekleyin
         return ad
 
     def clean_soyad(self):
         soyad = self.cleaned_data['soyad']
-        # Gerekirse soyad için özel doğrulama kurallarını buraya ekleyin
         return soyad
     
     def clean_tc_kimlik_no(self):
         tc_kimlik_no = self.cleaned_data['tc_kimlik_no']
-        # Gerekirse tc_kimlik_no için özel doğrulama kurallarını buraya ekleyin
         return tc_kimlik_no
     
     def clean_username(self):
         username = self.cleaned_data['username']
-        # Gerekirse username için özel doğrulama kurallarını buraya ekleyin
         return username
+    
+    def clean_universite(self):
+        universite = self.cleaned_data['universite']
+        return universite
+    
+
     
 
 class GraduateForm(forms.ModelForm):
@@ -65,17 +67,14 @@ class GraduateForm(forms.ModelForm):
 
     def clean_mezun_yili(self):
         mezun_yili = self.cleaned_data['mezun_yili']
-        # Gerekirse mezun_yili için özel doğrulama kurallarını buraya ekleyin
         return mezun_yili
     
     def clean_mezun_bolum(self):
         mezun_bolum = self.cleaned_data['mezun_bolum']
-        # Gerekirse mezun_bolum için özel doğrulama kurallarını buraya ekleyin
         return mezun_bolum
     
     def clean_mezun_derece(self):
         mezun_derece = self.cleaned_data['mezun_derece']
-        # Gerekirse mezun_derece için özel doğrulama kurallarını buraya ekleyin
         return mezun_derece
 
 
