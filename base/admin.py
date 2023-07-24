@@ -1,8 +1,11 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Graduate, Event, Message, FollowersAccount, Person
+from .models import Graduate, Event, Message, FollowersAccount, Person, University
 
-
+class UniversityAdmin(admin.ModelAdmin):
+    list_display = ('universite_adi',)
+    list_filter = ('universite_adi',)
+    search_fields = ('universite_adi',)
 
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('ad', 'soyad', 'email', 'username', 'telefon', 'adres', 'tc_kimlik_no','cinsiyet', 'profil', 'is_admin', 'is_active', 'is_staff', 'is_superuser')
@@ -34,6 +37,7 @@ admin.site.register(Graduate, GraduateAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Event,EventAdmin)
 admin.site.register(Message,MessageAdmin)
+admin.site.register(University,UniversityAdmin)
 admin.site.register(FollowersAccount)
 
 

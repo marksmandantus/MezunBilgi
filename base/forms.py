@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import authenticate
 from .models import Person, Graduate
 
 
@@ -14,7 +13,7 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = Person
-        fields = ('email', 'ad', 'soyad', 'telefon', 'password1', 'password2', 'tc_kimlik_no', 'universite')
+        fields = ('email', 'ad', 'soyad', 'telefon', 'password1', 'password2', 'tc_kimlik_no', 'universite_adi')
 
     def clean_email(self):
         email = self.cleaned_data['email'].lower()
@@ -53,12 +52,10 @@ class RegistrationForm(UserCreationForm):
         username = self.cleaned_data['username']
         return username
     
-    def clean_universite(self):
-        universite = self.cleaned_data['universite']
-        return universite
-    
-
-    
+    def clean_universite_adi(self):
+        universite_adi = self.cleaned_data['universite_adi']
+        return universite_adi
+      
 
 class GraduateForm(forms.ModelForm):
     class Meta:

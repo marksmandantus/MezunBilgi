@@ -1,6 +1,33 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager , PermissionsMixin
 
+
+class University(models.Model):
+    universite_adi = models.CharField(max_length=100)
+    sehir = models.CharField(max_length=100)
+    kurulus_yili = models.PositiveIntegerField()
+    web_site = models.CharField(max_length=100)
+    logo = models.ImageField(null=True, blank=True, upload_to="logo/")
+    universite_adres = models.CharField(max_length=100)
+    universite_telefon = models.CharField(max_length=100)
+    universite_eposta = models.CharField(max_length=100)
+    fax = models.CharField(max_length=100)
+    rektor = models.CharField(max_length=100)
+    genel_sekreter = models.CharField(max_length=100)
+    baskan = models.CharField(max_length=100)
+    profesor_sayisi = models.PositiveIntegerField()
+    docent_sayisi = models.PositiveIntegerField()
+    ogretim_gorevlisi_sayisi = models.PositiveIntegerField()
+    arastirma_gorevlisi_sayisi = models.PositiveIntegerField()
+    ogrenci_sayisi = models.PositiveIntegerField()
+    lisans_program_sayisi = models.PositiveIntegerField()
+    on_lisans_program_sayisi = models.PositiveIntegerField()
+    yuksek_lisans_program_sayisi = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.universite_adi
+    
+
 class PersonManager(BaseUserManager):
     
     def create_user(self,tc_kimlik_no,password=None):
@@ -9,6 +36,7 @@ class PersonManager(BaseUserManager):
         
         user = self.model(
             tc_kimlik_no = tc_kimlik_no,
+
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -38,13 +66,13 @@ class Person(AbstractBaseUser, PermissionsMixin):
     tc_kimlik_no = models.CharField(max_length=50, null=True, unique=True)
     cinsiyet = models.CharField(max_length=50, null=True)
     dogum_tarihi = models.DateField(null=True)
-    universite = models.CharField(max_length=50, null=True)
-    website = models.CharField(max_length=50, null=True)
-    facebook = models.CharField(max_length=50, null=True)
-    twitter = models.CharField(max_length=50, null=True)
-    instagram = models.CharField(max_length=50, null=True)
-    linkedin = models.CharField(max_length=50, null=True)
-    github = models.CharField(max_length=50, null=True)
+    universite_adi = models.ForeignKey(University, on_delete=models.CASCADE, null=True)
+    website = models.CharField(max_length=50, null=True, blank=True)
+    facebook = models.CharField(max_length=50, null=True, blank=True)
+    twitter = models.CharField(max_length=50, null=True, blank=True)
+    instagram = models.CharField(max_length=50, null=True, blank=True)
+    linkedin = models.CharField(max_length=50, null=True, blank=True)
+    github = models.CharField(max_length=50, null=True, blank=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

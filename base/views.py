@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from .models import Graduate , Message, Event, FollowersAccount, Person
 from .forms import kaydet 
 from .forms import RegistrationForm, GraduateForm
@@ -57,12 +56,13 @@ def registerPage(request, *args, **kwargs):
         form = RegistrationForm(request.POST)
         graduate_form = GraduateForm(request.POST)
         if form.is_valid() and graduate_form.is_valid():
-            user = form.save(commit=False)  # Save the user form without committing to the database
-            user.save()  # Now, save the user to the database
+            user = form.save(commit=False)  
+            user.save()  
 
-            graduate = graduate_form.save(commit=False)  # Save the graduate form without committing to the database
-            graduate.person = user  # Set the 'person' field to the newly created user
-            graduate.save()  # Now, save the graduate to the database
+            graduate = graduate_form.save(commit=False)  
+            graduate.person = user 
+            graduate.save()  
+
             email = form.cleaned_data.get('email').lower()
             raw_password = form.cleaned_data.get('password1')
             tc_kimlik_no = form.cleaned_data.get('tc_kimlik_no')
@@ -73,9 +73,9 @@ def registerPage(request, *args, **kwargs):
             mezun_yili = graduate_form.cleaned_data.get('mezun_yili')
             mezun_bolum = graduate_form.cleaned_data.get('mezun_bolum')
             mezun_derece = graduate_form.cleaned_data.get('mezun_derece')
-            universite = form.cleaned_data.get('universite')
+            universite_adi = form.cleaned_data.get('universite_adi')
             account = authenticate(email=email, password=raw_password, tc_kimlik_no=tc_kimlik_no, ad=ad, soyad=soyad, telefon=telefon, username=username,
-                                   mezun_yili=mezun_yili, mezun_bolum=mezun_bolum, mezun_derece=mezun_derece, universite=universite)
+                                   mezun_yili=mezun_yili, mezun_bolum=mezun_bolum, mezun_derece=mezun_derece, universite_adi=universite_adi)
             if account is not None:
                 login(request, account)
                 destination = kwargs.get("next")
@@ -84,6 +84,7 @@ def registerPage(request, *args, **kwargs):
                 return redirect('login')   
             else:
                 context['registration_form'] = form
+                context['graduate_form'] = graduate_form
 
     return render(request, 'register.html', context)
 
