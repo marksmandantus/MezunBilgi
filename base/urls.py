@@ -3,7 +3,6 @@ from django.contrib.auth import views as auth_views
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
-from django.conf.urls import include
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -11,9 +10,7 @@ urlpatterns = [
     path('register/', views.registerPage, name='register'),
     path('profile/', views.profile, name='profile'),
     path('profile/<str:username>/', views.view_profile, name='view_profile'),
-    path('edit_profile/', views.edit_profile, name='edit_profile'),
     path('profile/followers_count', views.followers_count, name='followers_count'),
-    path('save_changes/', views.save_changes, name='save_changes'),
 
     path('anasayfa/', views.anasayfa_view, name='anasayfa'),
     path('logout/', views.logout_view, name='logout'),

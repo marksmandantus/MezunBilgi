@@ -1,15 +1,18 @@
-$('#profilePhotoInput').change(function() {
-    var file = this.files[0];
-    var reader = new FileReader();
 
-    reader.onloadend = function() {
-        var newProfilePhoto = reader.result;
-        $('#profilePhoto').attr('src', newProfilePhoto);
-            // You can also use AJAX to upload the new profile photo to the server
-            // and save it in the database.
+    function showTab(tabName) {
+        var tabs = document.getElementsByClassName("tab-pane");
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].style.display = "none";
         }
-    if (file) {
-        reader.readAsDataURL(file);
-    }
-    });
+        document.getElementById(tabName).style.display = "block";
 
+        // Remove the "active" class from all tabs
+        var navItems = document.getElementsByClassName("nav-item");
+        for (var i = 0; i < navItems.length; i++) {
+            navItems[i].classList.remove("active");
+        }
+
+        // Add the "active" class to the clicked tab
+        var activeTab = document.querySelector('a[href="#' + tabName + '"]');
+        activeTab.parentElement.classList.add("active");
+    }

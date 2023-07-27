@@ -56,7 +56,7 @@
 
                     <div class="form-group">
                         <select id="meslek" name="mezun_bolum" class="form-control" required>
-                            <option value="" selected disabled>Mezun olduğunuz meslek</option>
+                            <option value="" selected disabled>Mezun olduğunuz bölüm</option>
                             <option value="Mühendis">Mühendis</option>
                             <option value="Öğretmen">Öğretmen</option>
                             <option value="Doktor">Doktor</option>
@@ -86,9 +86,6 @@
                     <div class="mb-3">
                         <input type="number" name="mezun_yili" placeholder="Mezun Yılı" id="inputYil" class="form-control" required>
                     </div>
-                    <div class="mb-3">
-                        <input type="text" name="universite_adi" placeholder="Mezun Olduğunuz Üniversite" id="inputUniversite" class="form-control" required>
-                    </div>
 
                     {% for field in registration_form %}
                         {% for error in field.errors %}
@@ -101,12 +98,23 @@
                         </div>
                     {% endif %}
 
+
+
                     <button class="text-center mt-3 btn btn-primary btn-block" type="submit">Kayıt Ol</button>
                 </form>
                 <div class="text-center mt-3">
                     <p>Önceden kayıt oldunuz mu?</p>
                     <a href="{% url 'login' %}" class="btn btn-outline-primary btn-block">Giriş Yap</a>
                 </div>
+                {% if messages %}
+                <div class="container mt-4">
+                    {% for message in messages %}
+                        <div class="alert alert-success" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

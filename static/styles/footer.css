@@ -1,9 +1,6 @@
-body {
-    margin-bottom: 80px; /* Add margin to the bottom of the body to create space for the footer */
-  }
 
   .footer {
-    position: fixed;
+    position: relative;
     left: 0;
     bottom: 0;
     width: 100%;

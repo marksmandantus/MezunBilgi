@@ -16,6 +16,8 @@ ALLOWED_HOSTS = []
 
 
 INSTALLED_APPS = [
+    'crispy_bootstrap4',
+    'crispy_forms',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -26,6 +28,9 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig',
     'job.apps.JobConfig',
     ]
+
+# crispy template pack
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 AUTH_USER_MODEL = 'base.Person'
 

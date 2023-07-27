@@ -28,7 +28,7 @@
           <p>Ön Lisans Mezun Sayısı: <span id="on-lisans-mezun-sayisi">{{ on_lisans_mezun_sayisi }}</span></p>
           <p>Yüksek Lisans Mezun Sayısı: <span id="yuksek-lisans-mezun-sayisi">{{ yuksek_lisans_mezun_sayisi }}</span></p>
         </div>
-        <form action="/login" method="GET">
+        <form action="{% url 'login' %}" method="GET">
           <input type="submit" value="Sisteme Giriş" class="giris">
         </form>
     </div>

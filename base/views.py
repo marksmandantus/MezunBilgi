@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Graduate , Message, Event, FollowersAccount, Person
-from .forms import kaydet 
-from .forms import RegistrationForm, GraduateForm
+from .forms import RegistrationForm, GraduateForm, UserUpdateForm, ProfileUpdateForm, GraduateUpdateForm
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404
+from django.contrib import messages
 
 def index(request):
     lisans_mezun_sayisi = Graduate.objects.filter(lisans=True).count()
@@ -34,16 +34,17 @@ def loginPage(request):
             user = Person.objects.get(tc_kimlik_no=tc_kimlik_no)
 
         except:
-            context['error_message'] = 'Kullanıcı adı veya şifre hatalı'
+            messages.error(request, 'Girdiğiniz bilgiler hatalı.')
 
 
         user = authenticate(request, tc_kimlik_no=tc_kimlik_no, password=password)
 
         if user is not None:
             login(request, user)
+            messages.success(request, 'Giriş başarılı.')
             return render(request, 'anasayfa.html')
         else:
-            context['error_message'] = 'Kullanıcı adı veya şifre hatalı'
+            messages.error(request, 'Girdiğiniz bilgiler hatalı.')
             return redirect('login')
             
     return render(request, 'login.html', context)
@@ -56,13 +57,12 @@ def registerPage(request, *args, **kwargs):
         form = RegistrationForm(request.POST)
         graduate_form = GraduateForm(request.POST)
         if form.is_valid() and graduate_form.is_valid():
-            user = form.save(commit=False)  
-            user.save()  
+            user = form.save(commit=False)  # Save the user form without committing to the database
+            user.save()  # Now, save the user to the database
 
-            graduate = graduate_form.save(commit=False)  
-            graduate.person = user 
-            graduate.save()  
-
+            graduate = graduate_form.save(commit=False)  # Save the graduate form without committing to the database
+            graduate.person = user  # Set the 'person' field to the newly created user
+            graduate.save()  # Now, save the graduate to the database
             email = form.cleaned_data.get('email').lower()
             raw_password = form.cleaned_data.get('password1')
             tc_kimlik_no = form.cleaned_data.get('tc_kimlik_no')
@@ -73,18 +73,18 @@ def registerPage(request, *args, **kwargs):
             mezun_yili = graduate_form.cleaned_data.get('mezun_yili')
             mezun_bolum = graduate_form.cleaned_data.get('mezun_bolum')
             mezun_derece = graduate_form.cleaned_data.get('mezun_derece')
-            universite_adi = form.cleaned_data.get('universite_adi')
             account = authenticate(email=email, password=raw_password, tc_kimlik_no=tc_kimlik_no, ad=ad, soyad=soyad, telefon=telefon, username=username,
-                                   mezun_yili=mezun_yili, mezun_bolum=mezun_bolum, mezun_derece=mezun_derece, universite_adi=universite_adi)
+                                   mezun_yili=mezun_yili, mezun_bolum=mezun_bolum, mezun_derece=mezun_derece)
             if account is not None:
+                messages.success(request, 'Hesabınız oluşturuldu.')
                 login(request, account)
                 destination = kwargs.get("next")
                 if destination:
                     return redirect(destination)
                 return redirect('login')   
             else:
+                messages.error(request, 'Hatalı giriş veya eksik bilgi girdiniz.')         
                 context['registration_form'] = form
-                context['graduate_form'] = graduate_form
 
     return render(request, 'register.html', context)
 
@@ -115,7 +115,22 @@ def profile(request):
     except Graduate.DoesNotExist:
         graduate_profile = None
 
-    user_followers = len(FollowersAccount.objects.filter(user=current_user))
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)  
+        #g_form = GraduateUpdateForm(request.POST, instance=request.user.graduate)
+        if u_form.is_valid():
+            u_form.save()
+            #g_form.save()
+            messages.success(request, f'Bilgileriniz güncellendi!')
+            return redirect('profile')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        #g_form = GraduateUpdateForm(instance=request.user.graduate)
+        
+
+    #p_form = ProfileUpdateForm(instance=request.user.profil)
+
+    """user_followers = len(FollowersAccount.objects.filter(user=current_user))
     user_following = len(FollowersAccount.objects.filter(follower=current_user))
     user_followers0 = FollowersAccount.objects.filter(user=current_user)
     user_followers1 = []
@@ -124,7 +139,7 @@ def profile(request):
         user_followers0 = i.follower
         user_followers1.append(user_followers0)
 
-    """if logged_in_user in user_followers1:
+    if logged_in_user in user_followers1:
         follow_button_value = 'unfollow'
     else:
         follow_button_value = 'follow'
@@ -132,11 +147,12 @@ def profile(request):
     print(user_followers)"""
 
     context = {'user_profile': user_profile,
-            'user_followers': user_followers,
-            'user_following': user_following,
             #'follow_button_value': follow_button_value,
             'current_user': current_user,
-            'graduate_profile': graduate_profile,}
+            'graduate_profile': graduate_profile,
+            'u_form': u_form,
+            
+            }
 
     return render(request, 'profile.html', context)
 
@@ -173,23 +189,6 @@ def view_profile(request, username):
         return render(request, 'user_not_found.html')
 
 
-def edit_profile(request):
-     # Get the logged-in user's ID
-    user_id = request.user.id
-
-    try:
-        user_profile = Person.objects.get(id=user_id)
-        graduate_profile = Graduate.objects.get(person=user_profile)
-    except Person.DoesNotExist:
-        user_profile = None
-        graduate_profile = None
-    except Graduate.DoesNotExist:
-        graduate_profile = None
-
-    return render(request, 'guncelle.html', {'user_profile': user_profile,
-                                             'graduate_profile': graduate_profile})
-
-
 def etkinlikler(request):
     etkinlikler = Event.objects.all()
     return render(request, 'etkinlikler.html', {'etkinlikler': etkinlikler})
@@ -217,7 +216,7 @@ def followers_count(request):
         return redirect('/?user='+user)
 
 
-def save_changes(request):
+"""def save_changes(request):
     if request.method == 'POST':
         form = kaydet(request.POST)
         if form.is_valid():
@@ -238,7 +237,7 @@ def save_changes(request):
     else:
         form = kaydet()
     
-    return render(request, 'guncelle.html', {'form': form})
+    return render(request, 'guncelle.html', {'form': form})"""
 
 
 def chat(request):

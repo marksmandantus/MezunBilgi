@@ -1,4 +1,5 @@
 {% load static %}
+{% load crispy_forms_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +11,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'styles/mezun.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-    
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 
 
 </head>
@@ -30,148 +34,191 @@
     </form>
 </div>
   
-  <div class="container">
+<div class="container">
     <div class="main-body">
         <div class="row">
+            <!-- Sol Taraftaki Kullanıcı Bilgileri -->
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body text-center">
+                        {% if user_profile.profil %}
+                        <img src="{{ user_profile.profil.url }}" alt="Profil" class="profile-image" width="125px">
+                        {%  else  %}
+                        <img src="{% static 'images/avatar1.jpg' %}" alt="Varsayılan Profil" class="profile-image" width="125px">
+                        {% endif %}
+                        <h4 class="mt-3">{{ user_profile.ad }} {{ user_profile.soyad }}</h4>
+                        <p class="text-secondary" style="font-size: 16px;">{{ user_profile.username }}</p>
+                        <hr>
+                        <p class="text-secondary mb-1" style="font-size: 18px;">Takipçi Sayısı: {{user_followers}}</p>
+                        <p class="text-secondary mb-1" style="font-size: 18px;">Takip Ettiklerim: {{user_following}}</p>
+                        <hr>
+                        {% if messages %}
+                        <div class="container mt-4">
+                            {% for message in messages %}
+                                <div class="alert alert-success" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <!-- İçerik Başlangıcı -->
+                        <div class="tab-content">
+                            <!-- İletişim Bilgileri İçeriği -->
+                            <div id="iletisim" class="tab-pane active">
+                                <form method="POST" enctype="multipart/form-data" class="mt-4">
+                                {% csrf_token %}
+                                <div class="container">
+                                    <div class="border rounded p-4">
+                                        <h3 class="border-bottom mb-4 pb-2">İletişim Bilgileri</h3>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="{{ u_form.ad.id_for_label }}" class="font-weight-bold">Ad:</label>
+                                                    <input type="text" class="form-control" id="{{ u_form.ad.auto_id }}" name="{{ u_form.ad.html_name }}" value="{{ u_form.ad.value }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="{{ u_form.soyad.id_for_label }}" class="font-weight-bold">Soyad:</label>
+                                                    <input type="text" class="form-control" id="{{ u_form.soyad.auto_id }}" name="{{ u_form.soyad.html_name }}" value="{{ u_form.soyad.value }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="{{ u_form.telefon.id_for_label }}" class="font-weight-bold">Telefon:</label>
+                                                    <input type="text" class="form-control" id="{{ u_form.telefon.auto_id }}" name="{{ u_form.telefon.html_name }}" value="{{ u_form.telefon.value }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="{{ u_form.email.id_for_label }}" class="font-weight-bold">E-Posta:</label>
+                                                    <input type="email" class="form-control" id="{{ u_form.email.auto_id }}" name="{{ u_form.email.html_name }}" value="{{ u_form.email.value }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="{{ u_form.adres.id_for_label }}" class="font-weight-bold">Lokasyon:</label>
+                                                    <input type="text" class="form-control" id="{{ u_form.adres.auto_id }}" name="{{ u_form.adres.html_name }}" value="{{ u_form.adres.value }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="{{ u_form.username.id_for_label }}" class="font-weight-bold">Username:</label>
+                                                    <input type="text" class="form-control" id="{{ u_form.username.auto_id }}" name="{{ u_form.username.html_name }}" value="{{u_form.username.value}}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-4">
+                                    <button type="submit" class="btn btn-primary btn-block">Kaydet</button>
+                                </div>
+                            </form>
+
+                            </div>
+            
+                            <!-- Üniversite Bilgileri İçeriği -->
+                            <div id="universite" class="tab-pane">
+                                <form>
+                                    <div class="input-group">
+                                        <label>Üniversite Adı:</label>
+                                        <div class="custom-select">
+                                            <select id="universite-select">
+                                                <option value="">Seçiniz</option>
+                                                <!-- Sunucu tarafından alınan veriler burada dinamik olarak oluşturulmalı -->
+                                                <option value="universite1">Üniversite 1</option>
+                                                <option value="universite2">Üniversite 2</option>
+                                                <option value="universite3">Üniversite 3</option>
+                                                <!-- ve diğer üniversiteler... -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Bölüm:</label>
+                                        <div class="custom-select">
+                                            <select id="bolum-select">
+                                                <option value="">Seçiniz</option>
+                                                <!-- Bölümler de aynı şekilde sunucu tarafından alınmalı ve burada dinamik olarak oluşturulmalı -->
+                                                <option value="bolum1">Bölüm 1</option>
+                                                <option value="bolum2">Bölüm 2</option>
+                                                <option value="bolum3">Bölüm 3</option>
+                                                <!-- ve diğer bölümler... -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Mezun Derecesi:</label>
+                                        <div class="custom-select">
+                                            <select id="mezun-derece-select">
+                                                <option value="">Seçiniz</option>
+                                                <!-- Mezun dereceleri burada dinamik olarak oluşturulmalı -->
+                                                <option value="lisans">Lisans</option>
+                                                <option value="yüksek-lisans">Yüksek Lisans</option>
+                                                <option value="doktora">Doktora</option>
+                                                <!-- ve diğer mezun dereceleri... -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Mezun Yılı:</label>
+                                        <div class="custom-select">
+                                            <select id="mezun-yil-select">
+                                                <option value="">Seçiniz</option>
+                                                <!-- Mezun yılları burada dinamik olarak oluşturulmalı -->
+                                                <option value="2020">2020</option>
+                                                <option value="2021">2021</option>
+                                                <option value="2022">2022</option>
+                                                <!-- ve diğer mezun yılları... -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="kaydetVeriler()">Kaydet</button>
+                                </form>
+                            </div>
+                            
+                            <!-- Bağlantılar İçeriği -->
+                            <div id="baglanti" class="tab-pane">
+                                <form>
+                                    <div class="input-group">
+                                        <label>Website:</label>
+                                        <input type="text" id="website-input" value="{{ user_profile.website }}">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Github:</label>
+                                        <input type="text" id="github-input" value="{{ user_profile.github }}">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Twitter:</label>
+                                        <input type="text" id="twitter-input" value="{{ user_profile.twitter }}">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Instagram:</label>
+                                        <input type="text" id="instagram-input" value="{{ user_profile.instagram }}">
+                                    </div>
+                                    <div class="input-group">
+                                        <label>Facebook:</label>
+                                        <input type="text" id="facebook-input" value="{{ user_profile.facebook }}">
+                                    </div>
+                                    <button type="button" onclick="kaydetVeriler()">Kaydet</button>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- İçerik Bitişi -->
+                    </div>
+                </div>
+            </div>
+            <!-- Sağ Taraftaki Menüler -->
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-body">
-                        <div class="d-flex flex-column align-items-center text-center">
-                            {% if user_profile.profil %}
-                            <img src="{{ user_profile.profil.url }}" alt="Profil" class="rounded-circle p-1 bg-primary" width="110">
-                            {%  else  %}
-                            <img src="{% static 'images/avatar1.jpg' %}" alt="Varsayılan Profil" class="rounded-circle p-1 bg-primary" width="110">
-                            {% endif %}
-                            <div class="mt-3">
-                                {% if graduate_profile %}
-                                <p class="text-secondary mb-1">Bölüm: {{ graduate_profile.mezun_bolum }}</p>
-                                <p class="text-secondary mb-1">Mezun Yılı: {{ graduate_profile.mezun_yili }}</p>
-                                <p class="text-secondary mb-1">Derece: {{ graduate_profile.mezun_derece }}</p>
-                                {% endif %}
-                                <!--<form action="followers_count" method="POST">
-                                    {% csrf_token %}        
-                                    <input type="hidden" name="user" value="{{current_user}}" readonly/>
-                                    <input type="hidden" name="follower" value="{{user.username}}" readonly/>
-                                    {% if follow_button_value == 'follow'%} 
-                                    <input type="hidden" name="value" value="follow" readonly/>                                               
-                                    <button type="submit" class="btn btn-primary">Takip Et</button>
-                                    {% else %}
-                                    <input type="hidden" name="value" value="unfollow" readonly/>                                               
-                                    <button type="submit" class="btn btn-primary">Takibi Bırak</button>
-                                    {% endif %}
-                                    <button type="submit" class="btn btn-outline-primary">Mesaj</button>
-                                </form>   -->
-                                <p class="text-secondary mb-1">Takipçi Sayısı: {{user_followers}}</p>   
-                                <p class="text-secondary mb-1">Takip Ettiklerim: {{user_following}}</p>                          
-                       
-                            </div>
-                           
-                        </div>
-                        
-                    </div>
-                    
-                </div>
-                {% if user_profile %}
-							<ul class="list-group list-group-flush">
-								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-									<h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe me-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>Website</h6>
-									<input type="text" class="form-control" value="{{user_profile.website}}">
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-									<h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github me-2 icon-inline"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>Github</h6>
-									<input type="text" class="form-control" value="{{user_profile.github}}">
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-									<h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter me-2 icon-inline text-info"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>Twitter</h6>
-									<input type="text" class="form-control" value="{{user_profile.twitter}}">
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-									<h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram me-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>Instagram</h6>
-									<input type="text" class="form-control" value="{{user_profile.instagram}}">
-								</li>
-								<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-									<h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook me-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>Facebook</h6>
-									<input type="text" class="form-control" value="{{user_profile.facebook}}">
-								</li>
-							</ul>
-							{% endif %}
-            </div>
-            <div class="col-lg-8">
-                <div class="card">
-                    <div class="card-body">
-                        {% if user_profile %}
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">Username</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                {{ user_profile.username }} 
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">Ad Soyad</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                {{ user_profile.ad }} {{ user_profile.soyad }}
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">E-Posta</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                {{ user_profile.email }}
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                          <div class="col-sm-3">
-                              <h6 class="mb-0">Telefon</h6>
-                          </div>
-                          <div class="col-sm-9 text-secondary">
-                              {{ user_profile.telefon }}
-                          </div>
-                      </div>
-                        <hr>
-                        <div class="row">
-                          <div class="col-sm-3">
-                              <h6 class="mb-0">TC Kimlik No</h6>
-                          </div>
-                          <div class="col-sm-9 text-secondary">
-                              {{ user_profile.tc_kimlik_no }}
-                          </div>
-                      </div>
-                        <hr>
-                        <div class="row">
-                          <div class="col-sm-3">
-                              <h6 class="mb-0">Adres</h6>
-                          </div>
-                          <div class="col-sm-9 text-secondary">
-                              {{ user_profile.adres }}
-                          </div>
-                      </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">Üniversite</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                {{ user_profile.universite_adi }}
-                            </div>
-                        </div>
-                        <hr>
-
-                        <!-- Other profile details -->
-                        {% endif %}
-                        <br>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <a class="btn btn-info" id="guncelle" href="{% url 'edit_profile' %}">Güncelle</a>
-                            </div>
-                        </div>
+                        <!-- Menü Başlangıcı -->
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" onclick="showTab('iletisim')" href="#"><i class="fas fa-envelope"></i> İletişim Bilgileri</a>
+                            </li>
+                            <!--<li class="nav-item">
+                                <a class="nav-link" onclick="showTab('kariyer')" href="#">Kariyer Bilgileri</a>
+                            </li>-->
+                            <li class="nav-item">
+                                <a class="nav-link" onclick="showTab('universite')" href="#"><i class="fas fa-graduation-cap"></i> Üniversite Bilgileri</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" onclick="showTab('baglanti')" href="#"><i class="fas fa-link"></i> Bağlantılar</a>
+                            </li>
+                        </ul>
+                        <!-- Menü Bitişi -->
                     </div>
                 </div>
             </div>
@@ -179,9 +226,19 @@
     </div>
 </div>
 
+<br><br><br><br>
+
+
+
+
+
+
+
   
 {% include 'footer.html' %}
-      
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/profil.js '%}">   
     <script src="{% static 'js/jquery-3.4.1.js' %}"></script>
     <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
     <script src="{% static 'js/bootstrap.affix.js' %}"></script>

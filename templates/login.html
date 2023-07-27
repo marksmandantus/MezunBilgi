@@ -29,7 +29,7 @@
                               <label for="password">Şifre</label>
                               <input type="password" class="form-control" name="password" required>
                           </div>
-                          <div class="form-group">
+                          <div class="form-group" >
                               <input type="submit" class="btn btn-primary btn-block" value="Giriş Yap">
                           </div>
                       </form>
@@ -37,6 +37,15 @@
                           <a href="{% url 'reset_password' %}">Şifremi Unuttum</a> |
                           <a href="{% url 'register' %}">Kayıt Ol</a>
                       </div>
+                      {% if messages %}
+                        <div class="container mt-4">
+                            {% for message in messages %}
+                                <div class="alert alert-success" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                   </div>
               </div>
           </div>

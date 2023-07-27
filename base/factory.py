@@ -1,10 +1,7 @@
 import factory
 from django.contrib.auth.models import User
 from .models import University , Event
-# from factory.faker import Faker
 from faker import Faker
-
-
 
 
 class EventFactory(factory.django.DjangoModelFactory):

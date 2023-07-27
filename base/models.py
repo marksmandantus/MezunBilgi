@@ -100,7 +100,7 @@ class Graduate(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
     mezun_yili = models.IntegerField()
     mezun_bolum = models.CharField(max_length=50)
-    mezun_derece = models.CharField(max_length=50)
+    mezun_derece = models.PositiveIntegerField()
     lisans = models.BooleanField(default=False)
     on_lisans = models.BooleanField(default=False)
     yuksek_lisans = models.BooleanField(default=False)

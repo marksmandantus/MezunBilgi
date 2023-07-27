@@ -1,0 +1,35 @@
+{% load static %}
+
+{% block crispy_field %}
+{% spaceless %}
+  <div class="form-group{% if form|crispy_has_errors %} has-error{% endif %}{% if form|crispy_has_success %} has-success{% endif %}{% if form|crispy_has_warning %} has-warning{% endif %}{% if form|crispy_has_info %} has-info{% endif %}">
+    {% if form|crispy_addon_before %}{% crispy_addon_before form %}{% endif %}
+    {% if form|crispy_input %}{% crispy_input form %}{% endif %}
+    {% if form|crispy_addon_after %}{% crispy_addon_after form %}{% endif %}
+    {% if form|crispy_help_text %}<small class="form-text text-muted">{{ form|crispy_help_text }}</small>{% endif %}
+    {% if form|crispy_errors %}<div class="invalid-feedback">{{ form|crispy_errors }}</div>{% endif %}
+  </div>
+{% endspaceless %}
+{% endblock crispy_field %}
+
+{% block crispy_field_class %}col{% endblock crispy_field_class %}
+
+{% block crispy_field_template %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% spaceless %}
+  <div class="{% block crispy_field_class %}col-12{% endblock crispy_field_class %}">
+    {% block crispy_field %}
+      <div class="form-group{% if form|crispy_has_errors %} has-danger{% endif %}">
+        {% if form|crispy_input %}
+          {% crispy_input form %}
+        {% endif %}
+        {% if form|crispy_help_text %}<small class="form-text text-muted">{{ form|crispy_help_text }}</small>{% endif %}
+        {% if form|crispy_errors %}<div class="invalid-feedback">{{ form|crispy_errors }}</div>{% endif %}
+      </div>
+    {% endblock crispy_field %}
+  </div>
+{% endspaceless %}
+{% endblock crispy_field_template %}
