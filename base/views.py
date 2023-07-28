@@ -50,42 +50,29 @@ def loginPage(request):
     return render(request, 'login.html', context)
 
 
-def registerPage(request, *args, **kwargs):
-    context = {}
-
+def registerPage(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-        graduate_form = GraduateForm(request.POST)
-        if form.is_valid() and graduate_form.is_valid():
-            user = form.save(commit=False)  # Save the user form without committing to the database
-            user.save()  # Now, save the user to the database
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password1'])  # Şifreleme işlemi
+            user.save()
 
-            graduate = graduate_form.save(commit=False)  # Save the graduate form without committing to the database
-            graduate.person = user  # Set the 'person' field to the newly created user
-            graduate.save()  # Now, save the graduate to the database
             email = form.cleaned_data.get('email').lower()
-            raw_password = form.cleaned_data.get('password1')
             tc_kimlik_no = form.cleaned_data.get('tc_kimlik_no')
-            ad = form.cleaned_data.get('ad')
-            soyad = form.cleaned_data.get('soyad')
-            telefon = form.cleaned_data.get('telefon')
-            username = form.cleaned_data.get('username')
-            mezun_yili = graduate_form.cleaned_data.get('mezun_yili')
-            mezun_bolum = graduate_form.cleaned_data.get('mezun_bolum')
-            mezun_derece = graduate_form.cleaned_data.get('mezun_derece')
-            account = authenticate(email=email, password=raw_password, tc_kimlik_no=tc_kimlik_no, ad=ad, soyad=soyad, telefon=telefon, username=username,
-                                   mezun_yili=mezun_yili, mezun_bolum=mezun_bolum, mezun_derece=mezun_derece)
+
+            account = authenticate(request, tc_kimlik_no=tc_kimlik_no, password=form.cleaned_data['password1'])
             if account is not None:
                 messages.success(request, 'Hesabınız oluşturuldu.')
                 login(request, account)
-                destination = kwargs.get("next")
-                if destination:
-                    return redirect(destination)
-                return redirect('login')   
+                return redirect('login')
             else:
-                messages.error(request, 'Hatalı giriş veya eksik bilgi girdiniz.')         
-                context['registration_form'] = form
+                messages.error(request, 'Hatalı giriş veya eksik bilgi girdiniz.')
 
+    else:
+        form = RegistrationForm()
+
+    context = {'registration_form': form}
     return render(request, 'register.html', context)
 
 
@@ -116,16 +103,13 @@ def profile(request):
         graduate_profile = None
 
     if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, instance=request.user)  
-        #g_form = GraduateUpdateForm(request.POST, instance=request.user.graduate)
+        u_form = UserUpdateForm(request.POST, instance=request.user)
         if u_form.is_valid():
             u_form.save()
-            #g_form.save()
-            messages.success(request, f'Bilgileriniz güncellendi!')
-            return redirect('profile')
+            messages.success(request, 'Profiliniz başarıyla güncellendi.')
+            return redirect('profile')  # Profil sayfasına yönlendirme
     else:
         u_form = UserUpdateForm(instance=request.user)
-        #g_form = GraduateUpdateForm(instance=request.user.graduate)
         
 
     #p_form = ProfileUpdateForm(instance=request.user.profil)

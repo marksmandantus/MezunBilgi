@@ -6,14 +6,11 @@ from .models import Person, Graduate
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(max_length=60, help_text='Required. Add a valid email address')
-    ad = forms.CharField(max_length=60, help_text='Required. Add a valid first name')
-    soyad = forms.CharField(max_length=60, help_text='Required. Add a valid last name')
-    telefon = forms.CharField(max_length=11, help_text='Required. Add a valid phone number')
-    username = forms.CharField(max_length=60, help_text='Required. Add a valid username')
-
+    tc_kimlik_no = forms.CharField(max_length=11, help_text='Required. Add a valid tc_kimlik_no')
+    
     class Meta:
         model = Person
-        fields = ('email', 'ad', 'soyad', 'telefon', 'password1', 'password2', 'tc_kimlik_no','username')
+        fields = ('email', 'password1', 'password2', 'tc_kimlik_no')
 
     def clean_email(self):
         email = self.cleaned_data['email'].lower()
@@ -30,32 +27,6 @@ class RegistrationForm(UserCreationForm):
         except Exception as e:
             return tc_kimlik_no
         raise forms.ValidationError(f'TC kimlik numarası {tc_kimlik_no} already in use.')
-    
-    def clean_telefon(self):
-        telefon = self.cleaned_data['telefon']
-        # Gerekirse telefon numarası için özel doğrulama kurallarını buraya ekleyin
-        # ÖZEL DOĞRULAMALAR BURAYA
-        return telefon
-
-    def clean_ad(self):
-        ad = self.cleaned_data['ad']
-        # Gerekirse ad için özel doğrulama kurallarını buraya ekleyin
-        return ad
-
-    def clean_soyad(self):
-        soyad = self.cleaned_data['soyad']
-        # Gerekirse soyad için özel doğrulama kurallarını buraya ekleyin
-        return soyad
-
-    def clean_tc_kimlik_no(self):
-        tc_kimlik_no = self.cleaned_data['tc_kimlik_no']
-        # Gerekirse tc_kimlik_no için özel doğrulama kurallarını buraya ekleyin
-        return tc_kimlik_no
-
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        # Gerekirse username için özel doğrulama kurallarını buraya ekleyin
-        return username
 
       
 

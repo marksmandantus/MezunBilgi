@@ -10,7 +10,7 @@
     <meta name="author" content="Mehmet">
     <meta name="keywords" content="Mezun Kayıt Sistemi">
 
-    <title>{% block title %} Profil Sayfası{% endblock %}</title>
+    <title>{% block title %} Kayıt Ol{% endblock %}</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -25,22 +25,10 @@
         <div class="card mx-auto p-4 shadow-lg rounded" style="max-width: 400px;">
             <div class="card-body">
                 <h2 class="text-center mb-4">Kayıt Ol</h2>
-                <form method="POST" action="">
+                <form method="POST">
                     {% csrf_token %}  
                     <div class="mb-3">
-                        <input type="text" name="ad" placeholder="İsim" id="inputName" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <input type="text" name="soyad" placeholder="Soyisim" id="inputSurname" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <input type="number" name="telefon" placeholder="Telefon Numarası" id="inputNumber" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
                         <input type="email" name="email" placeholder="Email" id="inputEmail" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <input type="text" name="username" placeholder="Kullanıcı Adı" id="inputUsername" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <input type="number" name="tc_kimlik_no" placeholder="TC Kimlik No" id="inputTC" class="form-control" required>
@@ -51,41 +39,7 @@
                     <div class="mb-3">
                         <input type="password" name="password2"  id="inputPassword2" class="form-control" required>
                     </div>
-
-                    <!-- Rest of the form -->
-
-                    <div class="form-group">
-                        <select id="meslek" name="mezun_bolum" class="form-control" required>
-                            <option value="" selected disabled>Mezun olduğunuz bölüm</option>
-                            <option value="Mühendis">Mühendis</option>
-                            <option value="Öğretmen">Öğretmen</option>
-                            <option value="Doktor">Doktor</option>
-                            <option value="Avukat">Avukat</option>
-                            <option value="Yazılım Geliştirici">Yazılım Geliştirici</option>
-                            <option value="Eczacı">Eczacı</option>
-                            <option value="Veteriner">Veteriner</option>
-                            <option value="Mimar">Mimar</option>
-                            <option value="Diş Hekimi">Diş Hekimi</option>
-                            <option value="Eğitmen">Eğitmen</option>
-                            <option value="Hemşire">Hemşire</option>
-                            <option value="Grafik Tasarımcı">Grafik Tasarımcı</option>
-                            <option value="Yönetici">Yönetici</option>
-                            <option value="Tıp Teknikeri">Tıp Teknikeri</option>
-                            <option value="Yazı İşleri Müdürü">Yazı İşleri Müdürü</option>
-                            <option value="Odyolog">Odyolog</option>
-                            <option value="Biyomedikal Mühendisi">Biyomedikal Mühendisi</option>
-                            <option value="Sosyal Medya Uzmanı">Sosyal Medya Uzmanı</option>
-                            <option value="Havacılık Uzmanı">Havacılık Uzmanı</option>
-                            <option value="İç Mimar">İç Mimar</option>
-                        </select>
-                    </div>
-                    <br>
-                    <div class="mb-3">
-                        <input type="number" name="mezun_derece" placeholder="Ortalamanız" id="inputOrtalama" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <input type="number" name="mezun_yili" placeholder="Mezun Yılı" id="inputYil" class="form-control" required>
-                    </div>
+                    
 
                     {% for field in registration_form %}
                         {% for error in field.errors %}
@@ -97,8 +51,6 @@
                             <p>{{registration_form.non_field_errors}}</p>
                         </div>
                     {% endif %}
-
-
 
                     <button class="text-center mt-3 btn btn-primary btn-block" type="submit">Kayıt Ol</button>
                 </form>
