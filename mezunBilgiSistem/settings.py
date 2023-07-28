@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'base.apps.BaseConfig',
     'job.apps.JobConfig',
+    'rest_framework',
+    'django_extensions',
     ]
 
 # crispy template pack
