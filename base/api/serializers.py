@@ -1,7 +1,30 @@
 from rest_framework import serializers
-from base.models import Person
+from base.models import Person, University, Event
+import datetime
 
-class PersonSerializer(serializers.Serializer):
+
+class PersonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Person
+        fields = '__all__'
+        read_only_fields = ('id',)
+
+class UniversitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = University
+        fields = '__all__'
+        read_only_fields = ('id',)
+
+class EventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = '__all__'
+        read_only_fields = ('id',)
+
+
+
+# STANDART SERIALIZERS
+class PersonDefaultSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     ad = serializers.CharField()
     username = serializers.CharField()
@@ -42,4 +65,51 @@ class PersonSerializer(serializers.Serializer):
         instance.github = validated_data.get('github', instance.github)
         instance.save()
         return instance
+    
+    def validate_ad(self, value):
+        if len(value) < 2:
+            raise serializers.ValidationError("Ad alanı en az 2 karakter olmalıdır.")
+        return value
+    
+    def validate_soyad(self, value):
+        if len(value) < 2:
+            raise serializers.ValidationError("Soyad alanı en az 2 karakter olmalıdır.")
+        return value
+    
+    def validate_tc_kimlik_no(self, value):
+        if len(value) != 11:
+            raise serializers.ValidationError("Tc Kimlik No alanı 11 karakter olmalıdır.")
+        return value
+    
+    def validate_telefon(self, value):
+        if len(value) != 10:
+            raise serializers.ValidationError("Telefon alanı 10 karakter olmalıdır.")
+        return value
+    
+    def validate_cinsiyet(self, value):
+        if value not in ['E', 'K']:
+            raise serializers.ValidationError("Cinsiyet alanı E veya K olmalıdır.")
+        return value
+    
+    def validate_dogum_tarihi(self, value):
+        if value > datetime.date.today():
+            raise serializers.ValidationError("Doğum Tarihi bugünden büyük olamaz.")
+        return value
+    
+    def validate_website(self, value):
+        if not value.startswith('http'):
+            raise serializers.ValidationError("Website alanı http ile başlamalıdır.")
+        return value
+    
+    def validate(self, attrs):
+        ad = attrs.get('ad')
+        soyad = attrs.get('soyad')
+        
+        if ad == soyad:
+            raise serializers.ValidationError("Ad ve Soyad alanları aynı olamaz.")
+        
+        return attrs
+
+    
+
 

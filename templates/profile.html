@@ -61,6 +61,7 @@
                             {% endfor %}
                         </div>
                         {% endif %}
+                        {{ user_form.errors }}
                         <!-- İçerik Başlangıcı -->
                         <div class="tab-content">
                             <!-- İletişim Bilgileri İçeriği -->
@@ -73,30 +74,30 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="{{ u_form.ad.id_for_label }}" class="font-weight-bold">Ad:</label>
-                                                    <input type="text" class="form-control" id="{{ u_form.ad.auto_id }}" name="{{ u_form.ad.html_name }}" value="{{ u_form.ad.value }}">
+                                                    <label for="{{ user_form.ad.id_for_label }}" class="font-weight-bold">Ad:</label>
+                                                    <input type="text" class="form-control" id="{{ user_form.ad.auto_id }}" name="{{ user_form.ad.html_name }}" value="{{ user_form.ad.value }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="{{ u_form.soyad.id_for_label }}" class="font-weight-bold">Soyad:</label>
-                                                    <input type="text" class="form-control" id="{{ u_form.soyad.auto_id }}" name="{{ u_form.soyad.html_name }}" value="{{ u_form.soyad.value }}">
+                                                    <label for="{{ user_form.soyad.id_for_label }}" class="font-weight-bold">Soyad:</label>
+                                                    <input type="text" class="form-control" id="{{ user_form.soyad.auto_id }}" name="{{ user_form.soyad.html_name }}" value="{{ user_form.soyad.value }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="{{ u_form.telefon.id_for_label }}" class="font-weight-bold">Telefon:</label>
-                                                    <input type="text" class="form-control" id="{{ u_form.telefon.auto_id }}" name="{{ u_form.telefon.html_name }}" value="{{ u_form.telefon.value }}">
+                                                    <label for="{{ user_form.telefon.id_for_label }}" class="font-weight-bold">Telefon:</label>
+                                                    <input type="text" class="form-control" id="{{ user_form.telefon.auto_id }}" name="{{ user_form.telefon.html_name }}" value="{{ user_form.telefon.value }}">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="{{ u_form.email.id_for_label }}" class="font-weight-bold">E-Posta:</label>
-                                                    <input type="email" class="form-control" id="{{ u_form.email.auto_id }}" name="{{ u_form.email.html_name }}" value="{{ u_form.email.value }}">
+                                                    <label for="{{ user_form.email.id_for_label }}" class="font-weight-bold">E-Posta:</label>
+                                                    <input type="email" class="form-control" id="{{ user_form.email.auto_id }}" name="{{ user_form.email.html_name }}" value="{{ user_form.email.value }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="{{ u_form.adres.id_for_label }}" class="font-weight-bold">Lokasyon:</label>
-                                                    <input type="text" class="form-control" id="{{ u_form.adres.auto_id }}" name="{{ u_form.adres.html_name }}" value="{{ u_form.adres.value }}">
+                                                    <label for="{{ user_form.adres.id_for_label }}" class="font-weight-bold">Lokasyon:</label>
+                                                    <input type="text" class="form-control" id="{{ user_form.adres.auto_id }}" name="{{ user_form.adres.html_name }}" value="{{ user_form.adres.value }}">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="{{ u_form.username.id_for_label }}" class="font-weight-bold">Username:</label>
-                                                    <input type="text" class="form-control" id="{{ u_form.username.auto_id }}" name="{{ u_form.username.html_name }}" value="{{u_form.username.value}}">
+                                                    <label for="{{ user_form.username.id_for_label }}" class="font-weight-bold">Username:</label>
+                                                    <input type="text" class="form-control" id="{{ user_form.username.auto_id }}" name="{{ user_form.username.html_name }}" value="{{user_form.username.value}}">
                                                 </div>
                                             </div>
                                         </div>
@@ -170,29 +171,48 @@
                             
                             <!-- Bağlantılar İçeriği -->
                             <div id="baglanti" class="tab-pane">
-                                <form>
-                                    <div class="input-group">
-                                        <label>Website:</label>
-                                        <input type="text" id="website-input" value="{{ user_profile.website }}">
+                                <form method="POST" enctype="multipart/form-data" class="mt-4">
+                                {% csrf_token %}
+                                <div class="container">
+                                    <div class="border rounded p-4">
+                                        <h3 class="border-bottom mb-4 pb-2">Bağlantı Bilgileri</h3>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="{{ user_form.github.id_for_label }}" class="font-weight-bold">Github:</label>
+                                                    <input type="text" class="form-control" id="{{ user_form.github.auto_id }}" name="{{ user_form.github.html_name }}" value="{{ user_form.github.value }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="{{ user_form.linkedin.id_for_label }}" class="font-weight-bold">Linkedin:</label>
+                                                    <input type="text" class="form-control" id="{{ user_form.linkedin.auto_id }}" name="{{ user_form.linkedin.html_name }}" value="{{ user_form.linkedin.value }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="{{ user_form.instagram.id_for_label }}" class="font-weight-bold">Instagram:</label>
+                                                    <input type="text" class="form-control" id="{{ user_form.instagram.auto_id }}" name="{{ user_form.instagram.html_name }}" value="{{ user_form.instagram.value }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="{{ user_form.twitter.id_for_label }}" class="font-weight-bold">Twitter:</label>
+                                                    <input type="text" class="form-control" id="{{ user_form.twitter.auto_id }}" name="{{ user_form.twitter.html_name }}" value="{{ user_form.twitter.value }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="{{ user_form.website.id_for_label }}" class="font-weight-bold">Website:</label>
+                                                    <input type="text" class="form-control" id="{{ user_form.website.auto_id }}" name="{{ user_form.website.html_name }}" value="{{ user_form.website.value }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="{{ user_form.facebook.id_for_label }}" class="font-weight-bold">Facebook:</label>
+                                                    <input type="text" class="form-control" id="{{ user_form.facebook.auto_id }}" name="{{ user_form.facebook.html_name }}" value="{{user_form.facebook.value}}">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="input-group">
-                                        <label>Github:</label>
-                                        <input type="text" id="github-input" value="{{ user_profile.github }}">
-                                    </div>
-                                    <div class="input-group">
-                                        <label>Twitter:</label>
-                                        <input type="text" id="twitter-input" value="{{ user_profile.twitter }}">
-                                    </div>
-                                    <div class="input-group">
-                                        <label>Instagram:</label>
-                                        <input type="text" id="instagram-input" value="{{ user_profile.instagram }}">
-                                    </div>
-                                    <div class="input-group">
-                                        <label>Facebook:</label>
-                                        <input type="text" id="facebook-input" value="{{ user_profile.facebook }}">
-                                    </div>
-                                    <button type="button" onclick="kaydetVeriler()">Kaydet</button>
-                                </form>
+                                </div>
+                                <div class="form-group mt-4">
+                                    <button type="submit" class="btn btn-primary btn-block">Kaydet</button>
+                                </div>
+                            </form>
+
                             </div>
                         </div>
                         <!-- İçerik Bitişi -->

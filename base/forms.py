@@ -52,24 +52,22 @@ class GraduateForm(forms.ModelForm):
     
 
 class UserUpdateForm(forms.ModelForm):
-    email = forms.EmailField()
-    ad = forms.CharField()
-    soyad = forms.CharField()
-    telefon = forms.CharField()
-    username = forms.CharField()
-    adres = forms.CharField()
-    website = forms.CharField()
-    facebook = forms.CharField()
-    instagram = forms.CharField()
-    linkedin = forms.CharField()
-    github = forms.CharField()
+    email = forms.EmailField(required=False)
+    ad = forms.CharField(required=False)
+    soyad = forms.CharField(required=False)
+    telefon = forms.CharField(required=False)
+    username = forms.CharField(required=False)
+    adres = forms.CharField(required=False)
 
     class Meta:
         model = Person
-        fields = ('email', 'ad', 'soyad', 'telefon','username', 'adres', 'website', 'facebook', 'instagram', 'linkedin', 'github')
+        fields = ('email', 'ad', 'soyad', 'telefon','username', 'adres')
 
 
 class GraduateUpdateForm(forms.ModelForm):
+    mezun_yili = forms.IntegerField(required=False)
+    mezun_bolum = forms.CharField(required=False)
+    mezun_derece = forms.IntegerField(required=False)
     class Meta:
         model = Graduate
         fields = ('mezun_yili', 'mezun_bolum', 'mezun_derece',)

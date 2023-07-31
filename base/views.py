@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Graduate , Message, Event, FollowersAccount, Person
-from .forms import RegistrationForm, GraduateForm, UserUpdateForm, ProfileUpdateForm, GraduateUpdateForm
+from .forms import RegistrationForm,  UserUpdateForm
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404
 from django.contrib import messages
@@ -86,13 +86,10 @@ def anasayfa_view(request):
 
 
 def profile(request):
-    # Get the logged-in user's ID
     user_id = request.user.id
 
     current_user = request.GET.get('user')
-    # logged_in_user = request.user.username(email)
 
-    # Query the logged-in user's data from the Graduate model
     try:
         user_profile = Person.objects.get(id=user_id)
         graduate_profile = Graduate.objects.get(person=user_profile)
@@ -103,39 +100,23 @@ def profile(request):
         graduate_profile = None
 
     if request.method == 'POST':
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        if u_form.is_valid():
-            u_form.save()
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
             messages.success(request, 'Profiliniz başarıyla güncellendi.')
             return redirect('profile')  # Profil sayfasına yönlendirme
+
+        else:
+            messages.error(request, 'Profiliniz güncellenemedi.')
+
     else:
-        u_form = UserUpdateForm(instance=request.user)
-        
+        user_form = UserUpdateForm(instance=request.user) 
 
-    #p_form = ProfileUpdateForm(instance=request.user.profil)
-
-    """user_followers = len(FollowersAccount.objects.filter(user=current_user))
-    user_following = len(FollowersAccount.objects.filter(follower=current_user))
-    user_followers0 = FollowersAccount.objects.filter(user=current_user)
-    user_followers1 = []
-
-    for i in user_followers0:
-        user_followers0 = i.follower
-        user_followers1.append(user_followers0)
-
-    if logged_in_user in user_followers1:
-        follow_button_value = 'unfollow'
-    else:
-        follow_button_value = 'follow'
-
-    print(user_followers)"""
 
     context = {'user_profile': user_profile,
-            #'follow_button_value': follow_button_value,
             'current_user': current_user,
             'graduate_profile': graduate_profile,
-            'u_form': u_form,
-            
+            'user_form': user_form,
             }
 
     return render(request, 'profile.html', context)
