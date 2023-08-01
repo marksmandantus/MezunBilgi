@@ -36,7 +36,7 @@ Merhaba! Mezun Bilgi Sistemi projesine katkıda bulunmak istediğiniz için teş
 
 9. İnceleme ve Birleştirme 🚀: Diğer geliştiriciler tarafından değişiklikleriniz gözden geçirilecek ve uygun görüldüğünde ana dala birleştirilecektir.
 
-10.Teşekkür ederiz! 🎉 Katkılarınız için teşekkür ederiz. Proje daha da gelişecek ve topluluğa fayda sağlayacaktır.
+10. Teşekkür ederiz! 🎉 Katkılarınız için teşekkür ederiz. Proje daha da gelişecek ve topluluğa fayda sağlayacaktır.
 
 
 
