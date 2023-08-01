@@ -65,13 +65,12 @@ class Person(AbstractBaseUser, PermissionsMixin):
     telefon = models.CharField(max_length=50, null=True, unique=True)
     adres = models.CharField(max_length=200, null=True)
     profil = models.ImageField(null=True, blank=True, upload_to="profil/")
-    tc_kimlik_no = models.CharField(max_length=50, null=True, unique=True)
+    tc_kimlik_no = models.CharField(max_length=11, null=True, unique=True)
     cinsiyet = models.CharField(max_length=50, null=True)
     dogum_tarihi = models.DateField(null=True)
-    universite_adi = models.ForeignKey(University, on_delete=models.CASCADE, null=True, blank=True)
     website = models.CharField(max_length=50, null=True)
-    facebook = models.CharField(max_length=50, null=True)
     twitter = models.CharField(max_length=50, null=True)
+    facebook = models.CharField(max_length=50, null=True)
     instagram = models.CharField(max_length=50, null=True)
     linkedin = models.CharField(max_length=50, null=True)
     github = models.CharField(max_length=50, null=True)
@@ -104,14 +103,16 @@ class Graduate(models.Model):
     lisans = models.BooleanField(default=False)
     on_lisans = models.BooleanField(default=False)
     yuksek_lisans = models.BooleanField(default=False)
+    universite_adi = models.ForeignKey(University, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.person.ad + ' ' + self.person.soyad
     
 
 class FollowersAccount(models.Model):
-    follower = models.CharField(max_length=1000)
-    user = models.CharField(max_length=1000)
+    follower = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='followers')
+    user = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='following')
+
 
     def __str__(self):
         return self.user
@@ -130,6 +131,7 @@ class Message(models.Model):
 
 class Event(models.Model):
     id = models.AutoField(primary_key=True)
+    mezunlar = models.ManyToManyField(Graduate, blank=True, related_name='etkinlikler')
     etkinlik_adi = models.CharField(max_length=50)
     etkinlik_tarihi = models.DateField()
     etkinlik_yeri = models.CharField(max_length=50)

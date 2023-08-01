@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from base.models import Person, University, Event
+from base.models import Person, University, Event, Graduate
 import datetime
 
 
@@ -20,6 +20,13 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = '__all__'
         read_only_fields = ('id',)
+
+class GraduateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Graduate
+        fields = '__all__'
+        read_only_fields = ('id',)
+
 
 
 

@@ -18,15 +18,30 @@ class RegistrationForm(UserCreationForm):
             user = Person.objects.get(email=email)
         except Exception as e:
             return email
-        raise forms.ValidationError(f'Email {email} already in use.')
+        raise forms.ValidationError('Bu email ile önceden kayıt yapılmıştır.')
     
     def clean_tc_kimlik_no(self):
-        tc_kimlik_no = self.cleaned_data['tc_kimlik_no']
-        try:
-            user = Person.objects.get(tc_kimlik_no=tc_kimlik_no)
-        except Exception as e:
-            return tc_kimlik_no
-        raise forms.ValidationError(f'TC kimlik numarası {tc_kimlik_no} already in use.')
+        tc_kimlik_no = self.cleaned_data['tc_kimlik_no'] 
+        
+        if len(tc_kimlik_no) != 11:
+            raise forms.ValidationError('TC kimlik numarası 11 karakterden oluşmalıdır.')
+        
+        # Check if TC kimlik numarası contains only digits
+        if not tc_kimlik_no.isdigit():
+            raise forms.ValidationError('TC kimlik numarası yalnızca rakamlardan oluşmalıdır.')
+        
+         # Check if TC kimlik numarası is not negative
+        if int(tc_kimlik_no) < 0:
+            raise forms.ValidationError('TC kimlik numarası negatif bir sayı olamaz.')
+        
+        return tc_kimlik_no
+    
+    def clean_password2(self):
+        password1 = self.cleaned_data.get("password1")
+        password2 = self.cleaned_data.get("password2")
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Şifreler eşleşmiyor. Lütfen aynı şifreyi girin.")
+        return password2
 
       
 

@@ -2,8 +2,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from base.models import Person, University, Event
-from base.api.serializers import PersonSerializer, UniversitySerializer, EventSerializer
+from base.models import Person, University, Event, Graduate
+from base.api.serializers import PersonSerializer, UniversitySerializer, EventSerializer, GraduateSerializer
 
 #class views
 from rest_framework.views import APIView
@@ -128,6 +128,49 @@ class EventDetailAPIView(APIView):
         event = self.get_object(pk)
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class GraduateListCreateAPIView(APIView):
+    def get(self, request):
+        graduates = Graduate.objects.all()
+        serializer = GraduateSerializer(graduates, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = GraduateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class GraduateDetailAPIView(APIView):
+    def get_object(self, pk):
+        graduate = get_object_or_404(Graduate, pk=pk)
+        return graduate
+    
+    def get(self, request, pk):
+        graduate = self.get_object(pk)
+        serializer = GraduateSerializer(graduate)
+        return Response(serializer.data)
+    
+    def put(self, request, pk):
+        graduate = self.get_object(pk)
+        serializer = GraduateSerializer(graduate, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, pk):
+        graduate = self.get_object(pk)
+        graduate.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+
 
 
 

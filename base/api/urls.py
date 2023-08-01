@@ -9,4 +9,6 @@ urlpatterns = [
     path('universities/<int:pk>/', api_views.UniversityDetailAPIView.as_view(), name='university-detail'),
     path('events/', api_views.EventListCreateAPIView.as_view(), name='event-list'),
     path('events/<int:pk>/', api_views.EventDetailAPIView.as_view(), name='event-detail'),
+    path('graduates/', api_views.GraduateListCreateAPIView.as_view(), name='graduate-list'),
+    path('graduates/<int:pk>/', api_views.GraduateDetailAPIView.as_view(), name='graduate-detail'),
 ]
