@@ -51,7 +51,3 @@ _Aratılan Mezun profili görüntüsü._
 ## Katkıda Bulunma
 
 Katkıda bulunmak için lütfen [CONTRIBUTING.md](/CONTRIBUTING.md) dosyasını inceleyin.
-
-## Lisans
-
-Bu proje [MIT Lisansı](/LICENSE) ile lisanslanmıştır.
