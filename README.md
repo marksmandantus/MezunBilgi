@@ -1,6 +1,6 @@
 # Mezun Bilgi Sistemi
 
-![Logo](https://example.com/logo.png)
+![Logo](/screenshots/logo.png)
 
 Mezun Bilgi Sistemi, üniversite mezunlarının bilgilerini ve etkinliklere katılımını yöneten bir web uygulamasıdır.
 
@@ -36,11 +36,17 @@ pip install -r requirements.txt
 
 ## Ekran Görüntüleri
 
+![Anasayfa](/screenshots/index.png)
+_Index görüntüsü._
+
 ![Anasayfa](/screenshots/home.png)
 _Anasayfa görüntüsü._
 
 ![Mezun Profili](/screenshots/profile.png)
 _Mezun profili görüntüsü._
+
+![Diğer Mezun Profili](/screenshots/view_profile.png)
+_Aratılan Mezun profili görüntüsü._
 
 ## Katkıda Bulunma
 
