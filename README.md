@@ -10,6 +10,7 @@ Bu proje için aşağıdaki adımları izleyerek kurulum yapabilirsiniz:
 
 1. Öncelikle Python paketlerini yüklemek için terminale aşağıdaki komutu girin:
 
+```bash```
 pip install -r requirements.txt
 
 
