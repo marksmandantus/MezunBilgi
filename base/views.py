@@ -2,10 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Graduate , Message, Event, FollowersAccount, Person
-from .forms import RegistrationForm,  UserUpdateForm
+from .forms import RegistrationForm,  UserUpdateForm, ProfileUpdateForm
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404
 from django.contrib import messages
+from django.core.mail import send_mail
+import uuid
+from django.urls import reverse
+
 
 def index(request):
     lisans_mezun_sayisi = Graduate.objects.filter(lisans=True).count()
@@ -49,6 +53,26 @@ def loginPage(request):
             
     return render(request, 'login.html', context)
 
+def activateEmail(request, email):
+    messages.success(request, f'Email adresinize bir aktivasyon linki gönderildi. Lütfen {email} adresinizi kontrol edin.')
+
+def create_activation_link(request, user):
+    token = str(uuid.uuid4())
+    user.activation_token = token
+    user.save()
+    
+    activation_url = request.build_absolute_uri(reverse('activate_account', args=[token]))
+    return activation_url
+    
+def send_activation_email(email, activation_token):
+    subject = 'Hesap Aktivasyonu'
+    message = f'Hesabınızı aktive etmek için aşağıdaki linke tıklayın:\n\n{activation_token}'
+    from_email = 'noreply@example.com'
+    recipient_list = [email]
+    
+    send_mail(subject, message, from_email, recipient_list)
+
+
 
 def registerPage(request):
     if request.method == 'POST':
@@ -65,6 +89,7 @@ def registerPage(request):
             if account is not None:
                 messages.success(request, 'Hesabınız oluşturuldu.')
                 login(request, account)
+                activateEmail(request, email)
                 return redirect('login')
             else:
                 messages.error(request, 'Hatalı giriş veya eksik bilgi girdiniz.')
@@ -101,8 +126,10 @@ def profile(request):
 
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
-        if user_form.is_valid():
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
+        if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
+            profile_form.save()
             messages.success(request, 'Profiliniz başarıyla güncellendi.')
             return redirect('profile')  # Profil sayfasına yönlendirme
 
@@ -111,6 +138,7 @@ def profile(request):
 
     else:
         user_form = UserUpdateForm(instance=request.user) 
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
 
 
     context = {'user_profile': user_profile,

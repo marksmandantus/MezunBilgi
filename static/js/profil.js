@@ -16,3 +16,12 @@
         var activeTab = document.querySelector('a[href="#' + tabName + '"]');
         activeTab.parentElement.classList.add("active");
     }
+
+    function toggleButtonText(input) {
+        const button = document.getElementById('profil-submit-button');
+        if (input.files.length > 0) {
+            button.style.display = 'block';
+        } else {
+            button.style.display = 'none';
+        }
+    }

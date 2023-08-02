@@ -79,6 +79,16 @@ class UserUpdateForm(forms.ModelForm):
         fields = ('email', 'ad', 'soyad', 'telefon','username', 'adres')
 
 
+class ProfileUpdateForm(forms.ModelForm):
+
+    profil = forms.ImageField(required=False)
+
+    class Meta:
+        model = Person
+        fields = ('profil',)
+
+
+
 class GraduateUpdateForm(forms.ModelForm):
     mezun_yili = forms.IntegerField(required=False)
     mezun_bolum = forms.CharField(required=False)
@@ -89,10 +99,6 @@ class GraduateUpdateForm(forms.ModelForm):
 
 
 
-class ProfileUpdateForm(forms.ModelForm):
-    class Meta:
-        model = Person
-        fields = ('profil',)
 
     
 
