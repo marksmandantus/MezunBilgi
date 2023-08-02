@@ -87,9 +87,9 @@ def activateEmail(request, email):
     })
     email = EmailMessage(mail_subject, message, to=[email])
     if email.send():
-        messages.success(request, f'Email adresinize bir aktivasyon linki gönderildi. Lütfen {email} adresinizi kontrol edin.')
+        messages.success(request, f'Email adresinize bir aktivasyon linki gönderildi. Lütfen email adresinizi kontrol edin.')
     else:
-        messages.error(request, f'Email {email} adresinize gönderilemedi. Lütfen kontrol ediniz.')
+        messages.error(request, f'Email adresinize gönderilemedi. Lütfen kontrol ediniz.')
 
 
 def registerPage(request):
