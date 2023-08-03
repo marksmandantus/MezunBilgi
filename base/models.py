@@ -28,6 +28,13 @@ class University(models.Model):
         return self.universite_adi
     
 
+class Location(models.Model):
+    sehir = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.sehir 
+    
+
 class PersonManager(BaseUserManager):
     
     def create_user(self,tc_kimlik_no,username, password=None, ):
@@ -63,7 +70,7 @@ class Person(AbstractBaseUser, PermissionsMixin):
     soyad = models.CharField(max_length=50)
     email = models.EmailField(max_length=50, null=True, unique=True)
     telefon = models.CharField(max_length=50, null=True, unique=True)
-    adres = models.CharField(max_length=200, null=True)
+    adres = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True)
     profil = models.ImageField(null=True, blank=True, upload_to="profil/")
     tc_kimlik_no = models.CharField(max_length=11, null=True, unique=True)
     cinsiyet = models.CharField(max_length=50, null=True)

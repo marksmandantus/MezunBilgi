@@ -65,12 +65,14 @@
                         <div class="container mt-4">
                             {% for message in messages %}
                                 <div class="alert alert-success" role="alert">
-                                    {{ message }}
+                                    {{ message }} 
                                 </div>
                             {% endfor %}
                         </div>
                         {% endif %}
-                        {{ user_form.errors }}
+                        <div class="error-message{% if not user_form.errors %} d-none{% endif %}">
+                            {{ user_form.errors }}
+                        </div>
                         <!-- İçerik Başlangıcı -->
                         <div class="tab-content">
                             <!-- İletişim Bilgileri İçeriği -->
@@ -102,7 +104,14 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="{{ user_form.adres.id_for_label }}" class="font-weight-bold">Lokasyon:</label>
-                                                    <input type="text" class="form-control" id="{{ user_form.adres.auto_id }}" name="{{ user_form.adres.html_name }}" value="{{ user_form.adres.value }}">
+                                                    <select class="form-control" id="{{ user_form.adres.auto_id }}" name="{{ user_form.adres.html_name }}">
+                                                        <option value="" selected disabled>{{user_form.adres.value}}</option>
+                                                        {% for location in locations %}
+                                                            <option value="{{ location.pk }}">{{ location.sehir }}</option>
+
+                                                        {% endfor %}
+                                                    </select>
+                                                    
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="{{ user_form.username.id_for_label }}" class="font-weight-bold">Username:</label>

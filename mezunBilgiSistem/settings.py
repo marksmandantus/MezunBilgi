@@ -16,6 +16,7 @@ ALLOWED_HOSTS = []
 
 
 INSTALLED_APPS = [
+    'captcha',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -162,4 +163,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
+#CAPTCHA 
+
+RECAPTCHA_PUBLIC_KEY = '6LduwXgnAAAAADfBGX9biSe8bI17pknSZvfIikGv'
+RECAPTCHA_PRIVATE_KEY = '6LduwXgnAAAAAJVywHimoRYRnyTlfx65_GFyQDqb'
+
+RECAPTCHA_REQUIRED_SCORE = 0.85
 

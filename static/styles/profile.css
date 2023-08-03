@@ -232,3 +232,16 @@ input[type="email"] {
 
 }
 
+.error-message {
+  background-color: #ffcccc; /* Kırmızı arkaplan rengi */
+  padding: 5px;
+  color: #ff0000; /* Kırmızı metin rengi */
+  font-size: 15px;
+
+}
+
+.errorlist{
+  list-style: none; /* Noktayı kaldırır */
+
+}
+

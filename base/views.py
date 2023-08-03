@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
-from .models import Graduate , Message, Event, FollowersAccount, Person
-from .forms import RegistrationForm,  UserUpdateForm, ProfileUpdateForm
+from .models import Graduate , Message, Event, FollowersAccount, Person, Location
+from .forms import RegistrationForm,  UserUpdateForm, ProfileUpdateForm, FormWithCaptcha
 from .tokens import account_activation_token
 from django.http import Http404
 from django.contrib import messages
@@ -13,7 +13,6 @@ from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-
 
 
 def index(request):
@@ -33,11 +32,18 @@ def user_not_authenticated(user):
     return not user.is_authenticated
 
 
-def loginPage(request):
-    context = {}
+def loginPage(request): 
     if request.method == 'POST':
+        form = FormWithCaptcha(request.POST)
+        if form.is_valid():
+            if form.cleaned_data.get('captcha', False):
+                messages.success(request, 'Giriş başarılı.')
+        else:
+            messages.error(request, 'Yanlış Captcha.')
+            return redirect('login')
         tc_kimlik_no = request.POST.get('tc_kimlik_no')
         password = request.POST.get('password')
+        
 
         try:
             user = Person.objects.get(tc_kimlik_no=tc_kimlik_no)
@@ -55,7 +61,10 @@ def loginPage(request):
         else:
             messages.error(request, 'Girdiğiniz bilgiler hatalı.')
             return redirect('login')
-            
+    form = FormWithCaptcha()
+    context = {
+        'form': form,
+    }
     return render(request, 'login.html', context)
 
 def activate(request, uidb64, token):
@@ -132,6 +141,8 @@ def profile(request):
     user_id = request.user.id
 
     current_user = request.GET.get('user')
+    locations = Location.objects.all()
+
 
     try:
         user_profile = Person.objects.get(id=user_id)
@@ -163,6 +174,7 @@ def profile(request):
             'current_user': current_user,
             'graduate_profile': graduate_profile,
             'user_form': user_form,
+            'locations': locations,
             }
 
     return render(request, 'profile.html', context)

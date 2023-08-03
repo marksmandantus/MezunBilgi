@@ -1,8 +1,12 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Person, Graduate
+from .models import Person, Graduate, Location
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
+from django.core.exceptions import ValidationError
 
-
+class FormWithCaptcha(forms.Form):
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox(attrs={'data-callback': 'onCaptchaSuccess'}))
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(max_length=60, help_text='Required. Add a valid email address')
@@ -72,12 +76,17 @@ class UserUpdateForm(forms.ModelForm):
     soyad = forms.CharField(required=False)
     telefon = forms.CharField(required=False)
     username = forms.CharField(required=False)
-    adres = forms.CharField(required=False)
+    adres = forms.ModelChoiceField(queryset=Location.objects.all(), required=False)
 
     class Meta:
         model = Person
         fields = ('email', 'ad', 'soyad', 'telefon','username', 'adres')
 
+    def clean_telefon(self):
+        telefon = self.cleaned_data.get('telefon')
+        if telefon and len(telefon) != 10:
+            raise ValidationError("Telefon numarası 10 haneli olmalıdır.")
+        return telefon
 
 class ProfileUpdateForm(forms.ModelForm):
 

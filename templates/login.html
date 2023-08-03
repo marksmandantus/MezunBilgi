@@ -32,11 +32,13 @@
                           <div class="form-group" >
                               <input type="submit" class="btn btn-primary btn-block" value="Giriş Yap">
                           </div>
+                          {{ form.captcha }}
                       </form>
                       <div class="text-center">
                           <a href="{% url 'password_reset' %}">Şifremi Unuttum</a> |
                           <a href="{% url 'register' %}">Kayıt Ol</a>
                       </div>
+                      
                       {% if messages %}
                         <div class="container mt-4">
                             {% for message in messages %}
