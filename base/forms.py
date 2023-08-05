@@ -102,9 +102,10 @@ class GraduateUpdateForm(forms.ModelForm):
     mezun_yili = forms.IntegerField(required=False)
     mezun_bolum = forms.CharField(required=False)
     mezun_derece = forms.IntegerField(required=False)
+    universite_adi = forms.CharField(required=False)
     class Meta:
         model = Graduate
-        fields = ('mezun_yili', 'mezun_bolum', 'mezun_derece',)
+        fields = ('mezun_yili', 'mezun_bolum', 'mezun_derece', 'universite_adi',)
 
 
 

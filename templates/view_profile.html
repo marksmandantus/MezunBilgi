@@ -39,7 +39,7 @@
                                 <p class="text-secondary mb-1">Mezun Yılı: {{ graduate_profile.mezun_yili }}</p>
                                 <p class="text-secondary mb-1">Derece: {{ graduate_profile.mezun_derece }}</p>
                                 {% endif %}
-                                <form action="followers_count" method="POST">
+                                <!--<form action="followers_count" method="POST">
                                     {% csrf_token %}        
                                     <input type="hidden" name="user" value="{{current_user}}" readonly/>
                                     <input type="hidden" name="follower" value="{{user.username}}" readonly/>
@@ -53,7 +53,7 @@
                                     <button type="submit" class="btn btn-outline-primary">Mesaj</button>
                                 </form>   
                                 <p class="text-secondary mb-1">Takipçi Sayısı: {{user_followers}}</p>   
-                                <p class="text-secondary mb-1">Takip Ettiklerim: {{user_following}}</p>                          
+                                <p class="text-secondary mb-1">Takip Ettiklerim: {{user_following}}</p> -->                         
                        
                             </div>
                            

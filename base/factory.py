@@ -1,6 +1,6 @@
 import factory
 from django.contrib.auth.models import User
-from .models import University , Event, Person, Graduate
+from .models import University , Event, Person, Graduate, Location
 from faker import Faker
 
 
@@ -75,7 +75,7 @@ class GraduateFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Graduate
 
-    person = factory.SubFactory(PersonFactory)
+    person = factory.Faker('random_element', elements=Person.objects.all())
     mezun_yili = factory.Faker('pyint', min_value=2000, max_value=2023)
     mezun_bolum = factory.Faker('word')
     mezun_derece = factory.Faker('pyint')

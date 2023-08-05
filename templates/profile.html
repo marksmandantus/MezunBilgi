@@ -50,7 +50,7 @@
                                     <img src="{% static 'images/avatar1.jpg' %}" alt="Varsayılan Profil" class="profile-image" width="125px">
                                 {% endif %}
                                 {{ profile_form.profil }}
-                                <input type="file" name="profil" accept="image/*" onchange="toggleButtonText(this)">
+                                <input id="customFile" type="file" name="profil" accept="image/*" onchange="toggleButtonText(this)">
                                 <button type="submit" id="profil-submit-button" style="display: none;" onchange="toggleButtonText(this)">Profil Fotoğrafını Kaydet</button>
                             </div>
                         </form>
@@ -58,9 +58,9 @@
                         <h4 class="mt-3">{{ user_profile.ad }} {{ user_profile.soyad }}</h4>
                         <p class="text-secondary" style="font-size: 16px;">{{ user_profile.username }}</p>
                         <hr>
-                        <p class="text-secondary mb-1" style="font-size: 18px;">Takipçi Sayısı: {{user_followers}}</p>
+                        <!--<p class="text-secondary mb-1" style="font-size: 18px;">Takipçi Sayısı: {{user_followers}}</p>
                         <p class="text-secondary mb-1" style="font-size: 18px;">Takip Ettiklerim: {{user_following}}</p>
-                        <hr>
+                        <hr>-->
                         {% if messages %}
                         <div class="container mt-4">
                             {% for message in messages %}
@@ -131,29 +131,28 @@
                             <!-- Üniversite Bilgileri İçeriği -->
                             <div id="universite" class="tab-pane">
                                 <form>
+                                    {% csrf_token %}
                                     <div class="input-group">
                                         <label>Üniversite Adı:</label>
                                         <div class="custom-select">
-                                            <select id="universite-select">
-                                                <option value="">Seçiniz</option>
-                                                <!-- Sunucu tarafından alınan veriler burada dinamik olarak oluşturulmalı -->
-                                                <option value="universite1">Üniversite 1</option>
-                                                <option value="universite2">Üniversite 2</option>
-                                                <option value="universite3">Üniversite 3</option>
-                                                <!-- ve diğer üniversiteler... -->
+                                            <select class="form-control" id="{{ graduate_form.universite_adi.auto_id }}" name="{{ graduate_form.universite_adi.html_name }}">
+                                                <option value="" selected disabled>{{graduate_form.universite_adi.value}}</option>
+                                                {% for university in universities %}
+                                                    <option value="{{ university.universite_adi }}">{{ university.universite_adi }}</option>
+
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="input-group">
                                         <label>Bölüm:</label>
                                         <div class="custom-select">
-                                            <select id="bolum-select">
-                                                <option value="">Seçiniz</option>
-                                                <!-- Bölümler de aynı şekilde sunucu tarafından alınmalı ve burada dinamik olarak oluşturulmalı -->
-                                                <option value="bolum1">Bölüm 1</option>
-                                                <option value="bolum2">Bölüm 2</option>
-                                                <option value="bolum3">Bölüm 3</option>
-                                                <!-- ve diğer bölümler... -->
+                                            <select class="form-control" id="{{ graduate_form.mezun_bolum.auto_id }}" name="{{ graduate_form.mezun_bolum.html_name }}">
+                                                <option value="" selected disabled>{{graduate_form.mezun_bolum.value}}</option>
+                                                {% for graduate in graduates %}
+                                                    <option value="{{ graduate.mezun_bolum }}">{{ graduate.mezun_bolum }}</option>
+
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
@@ -161,29 +160,46 @@
                                         <label>Mezun Derecesi:</label>
                                         <div class="custom-select">
                                             <select id="mezun-derece-select">
-                                                <option value="">Seçiniz</option>
-                                                <!-- Mezun dereceleri burada dinamik olarak oluşturulmalı -->
+                                                <option value="" selected disabled>Seçiniz</option>
                                                 <option value="lisans">Lisans</option>
                                                 <option value="yüksek-lisans">Yüksek Lisans</option>
                                                 <option value="doktora">Doktora</option>
-                                                <!-- ve diğer mezun dereceleri... -->
                                             </select>
                                         </div>
                                     </div>
                                     <div class="input-group">
                                         <label>Mezun Yılı:</label>
                                         <div class="custom-select">
-                                            <select id="mezun-yil-select">
-                                                <option value="">Seçiniz</option>
-                                                <!-- Mezun yılları burada dinamik olarak oluşturulmalı -->
-                                                <option value="2020">2020</option>
-                                                <option value="2021">2021</option>
+                                            <select class="form-control" id="{{ graduate_form.mezun_yili.auto_id }}" name="{{ graduate_form.mezun_yili.html_name }}">
+                                                <option value="" selected disabled>{{graduate_form.mezun_yili.value}}</option>
                                                 <option value="2022">2022</option>
-                                                <!-- ve diğer mezun yılları... -->
+                                                <option value="2021">2021</option>
+                                                <option value="2020">2020</option>
+                                                <option value="2019">2019</option>
+                                                <option value="2018">2018</option>
+                                                <option value="2017">2017</option>
+                                                <option value="2016">2016</option>
+                                                <option value="2015">2015</option>
+                                                <option value="2014">2014</option>
+                                                <option value="2013">2013</option>
+                                                <option value="2012">2012</option>
+                                                <option value="2011">2011</option>
+                                                <option value="2010">2010</option>
+                                                <option value="2009">2009</option>
+                                                <option value="2008">2008</option>
+                                                <option value="2007">2007</option>
+                                                <option value="2006">2006</option>
+                                                <option value="2005">2005</option>
+                                                <option value="2004">2004</option>
+                                                <option value="2003">2003</option>
+                                                <option value="2002">2002</option>
+                                                <option value="2001">2001</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <button type="button" onclick="kaydetVeriler()">Kaydet</button>
+                                    <div class="form-group mt-4">
+                                        <button type="submit" class="btn btn-primary btn-block">Kaydet</button>
+                                    </div>
                                 </form>
                             </div>
                             
@@ -245,7 +261,7 @@
                         <!-- Menü Başlangıcı -->
                         <ul class="nav nav-pills flex-column">
                             <li class="nav-item">
-                                <a class="nav-link active" onclick="showTab('iletisim')" href="#"><i class="fas fa-envelope"></i> İletişim Bilgileri</a>
+                                <a class="nav-link " onclick="showTab('iletisim')" href="#"><i class="fas fa-envelope"></i> İletişim Bilgileri</a>
                             </li>
                             <!--<li class="nav-item">
                                 <a class="nav-link" onclick="showTab('kariyer')" href="#">Kariyer Bilgileri</a>

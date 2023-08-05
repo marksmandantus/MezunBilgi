@@ -117,8 +117,8 @@ class Graduate(models.Model):
     
 
 class FollowersAccount(models.Model):
-    follower = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='followers')
-    user = models.ForeignKey('Person', on_delete=models.CASCADE, related_name='following')
+    follower = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='followers')
+    user = models.ForeignKey(Person, on_delete=models.CASCADE, related_name='following')
 
 
     def __str__(self):
@@ -126,7 +126,7 @@ class FollowersAccount(models.Model):
         
 
 class Message(models.Model):
-    user = models.ForeignKey(Graduate, on_delete=models.CASCADE)
+    user = models.ForeignKey(Person, on_delete=models.CASCADE)
     body = models.TextField()
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

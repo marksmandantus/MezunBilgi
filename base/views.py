@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
-from .models import Graduate , Message, Event, FollowersAccount, Person, Location
-from .forms import RegistrationForm,  UserUpdateForm, ProfileUpdateForm, FormWithCaptcha
+from .models import Graduate , Message, Event, FollowersAccount, Person, Location, University
+from .forms import RegistrationForm,  UserUpdateForm, ProfileUpdateForm, FormWithCaptcha, GraduateUpdateForm
 from .tokens import account_activation_token
 from django.http import Http404
 from django.contrib import messages
@@ -13,8 +13,19 @@ from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django_ratelimit.decorators import ratelimit
 
 
+def rate_limit_with_template(view_func):
+    @ratelimit(key='user_or_ip', rate='10/m', method='GET')
+    def _wrapped_view(request, *args, **kwargs):
+        if request.limited:
+            return render(request, 'ratelimit.html')
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view
+
+
+@rate_limit_with_template
 def index(request):
     lisans_mezun_sayisi = Graduate.objects.filter(lisans=True).count()
     on_lisans_mezun_sayisi = Graduate.objects.filter(on_lisans=True).count()
@@ -142,6 +153,8 @@ def profile(request):
 
     current_user = request.GET.get('user')
     locations = Location.objects.all()
+    universities = University.objects.all()
+    graduates = Graduate.objects.all()
 
 
     try:
@@ -156,9 +169,12 @@ def profile(request):
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
-        if user_form.is_valid() and profile_form.is_valid():
+        graduate_form = GraduateUpdateForm(request.POST, instance=request.user)
+
+        if user_form.is_valid() and profile_form.is_valid() and graduate_form.is_valid():
             user_form.save()
             profile_form.save()
+            graduate_form.save()
             messages.success(request, 'Profiliniz başarıyla güncellendi.')
             return redirect('profile')  # Profil sayfasına yönlendirme
 
@@ -168,6 +184,7 @@ def profile(request):
     else:
         user_form = UserUpdateForm(instance=request.user) 
         profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user)
+        graduate_form = GraduateUpdateForm(request.POST, instance=request.user)
 
 
     context = {'user_profile': user_profile,
@@ -175,6 +192,9 @@ def profile(request):
             'graduate_profile': graduate_profile,
             'user_form': user_form,
             'locations': locations,
+            'universities': universities,
+            'graduates': graduates,
+            'graduate_form': graduate_form,
             }
 
     return render(request, 'profile.html', context)
@@ -237,30 +257,6 @@ def followers_count(request):
             followers_cnt = FollowersAccount.objects.get(user=user, follower=follower)
             followers_cnt.delete()
         return redirect('/?user='+user)
-
-
-"""def save_changes(request):
-    if request.method == 'POST':
-        form = kaydet(request.POST)
-        if form.is_valid():
-            # Form verilerini kaydetme işlemini burada gerçekleştirin
-            email = request.POST.get('email')
-            telefon = request.POST.get('telefon')
-            adres = request.POST.get('adres')
-
-            Graduate = Graduate.objects.get(id=request.user.id)
-
-            Graduate.email = email
-            Graduate.telefon = telefon
-            Graduate.adres = adres
-
-            Graduate.save()
-           
-            return redirect('profile')
-    else:
-        form = kaydet()
-    
-    return render(request, 'guncelle.html', {'form': form})"""
 
 
 def chat(request):
